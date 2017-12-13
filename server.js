@@ -162,7 +162,7 @@ app.get('/shopping', function(req, res){
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-===-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-var port = 8083
+var port = 80
 
 app.listen(port, function(){
 
