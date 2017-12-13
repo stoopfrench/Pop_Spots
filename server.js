@@ -1,6 +1,9 @@
 
 const express = require('express')
 const request = require('request')
+var HTTP = require('http')
+var HTTPS = require('https')
+var fs = require('fs')
 
 var secrets = require('./secrets.js')
 
@@ -162,9 +165,31 @@ app.get('/shopping', function(req, res){
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-===-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-var port = 80
+try {
+    var httpsConfig = {
+        key: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/fullchain.pem'),
+    }
 
-app.listen(port, function(){
+    var httpsServer = HTTPS.createServer(httpsConfig, app)
+    // 443 is the default port for HTTPS traffic
+    httpsServer.listen(443)
+    var httpApp = express()
+    httpApp.use(function(req, res, next){
+        res.redirect('https://thepasswordisdragons.com' + req.url)
+    })
+    httpApp.listen(80)
+}
+catch(e){
+    console.log(e)
+    console.log('could not start HTTPS server')
+    var httpServer = HTTP.createServer(app)
+    httpServer.listen(80)
+}
 
-    console.log("'HotSpots' running on port " + port)
-})
+// var port = 80
+
+// app.listen(port, function(){
+
+//     console.log("'HotSpots' running on port " + port)
+// })
