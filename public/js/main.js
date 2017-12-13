@@ -425,6 +425,11 @@
 
 		clearPlaceInfoWindows()
 
+		if(centerMarker !== null){
+			
+			hideCenterMarker()
+		}
+
 		var userinput = $('#locationTextField').val()
 
 		$('#locationTextField').blur()
@@ -510,7 +515,7 @@
 								position: new google.maps.LatLng(location.lat, location.lng),
 								center: `{lat: ${location.lat}, lng: ${location.lng}}`,
 								visible: true,
-								icon: 'http://maps.google.com/mapfiles/marker_orange.png',
+								icon: '/images/marker_orange.png',
 								title: location.name,
 								categories: location.categories,
 								about: location.about,
@@ -672,7 +677,7 @@
 								position: new google.maps.LatLng(location.lat, location.lng),
 								center: `{lat: ${location.lat}, lng: ${location.lng}}`,
 								visible: true,
-								icon: 'http://maps.google.com/mapfiles/marker_purple.png',
+								icon: '/images/marker_purple.png',
 								title: location.name,
 								categories: location.categories,
 								about: location.about,
@@ -749,25 +754,25 @@
 
 								   google.maps.event.addListener(entertainmentInfoWindow, 'domready', function() {
 
-									   var iwOuter = $('.gm-style-iw')
+								   	var iwOuter = $('.gm-style-iw')
 
-									   var iwBackground = iwOuter.prev()
+								   	var iwBackground = iwOuter.prev()
 
-									   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+								   	iwBackground.children(':nth-child(2)').css({'display' : 'none'})
 
-									   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+								   	iwBackground.children(':nth-child(4)').css({'display' : 'none'})
 
-								  		var iwCloseBtn = iwOuter.next()
-										
-										iwCloseBtn.css({
-										  opacity: '1', // by default the close button has an opacity of 0.7
-										  padding: '.4rem',
-										  textAlign: 'center',
-										  right: '34px', top: '4px', // button repositioning
-										  border: '5px solid #5A4BC6', // increasing button border and new color
-										  'border-radius': '13px', // circular effect
-										  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
-										  });
+							  		var iwCloseBtn = iwOuter.next()
+									
+									iwCloseBtn.css({
+									  opacity: '1', // by default the close button has an opacity of 0.7
+									  padding: '.4rem',
+									  textAlign: 'center',
+									  right: '34px', top: '4px', // button repositioning
+									  border: '5px solid #5A4BC6', // increasing button border and new color
+									  'border-radius': '13px', // circular effect
+									  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
+									  });
 									})
 
 									entertainmentInfoWindows.push(entertainmentInfoWindow)
@@ -831,7 +836,7 @@
 								position: new google.maps.LatLng(location.lat, location.lng),
 								center: `{lat: ${location.lat}, lng: ${location.lng}}`,
 								visible: true,
-								icon: ' http://maps.google.com/mapfiles/marker.png',
+								icon: ' /images/marker_red.png',
 								title: location.name,
 								categories: location.categories,
 								about: location.about,
@@ -988,7 +993,7 @@
 								position: new google.maps.LatLng(location.lat, location.lng),
 								center: `{lat: ${location.lat}, lng: ${location.lng}}`,
 								visible: true,
-								icon: 'http://maps.google.com/mapfiles/marker_green.png',
+								icon: '/images/marker_green.png',
 								title: location.name,
 								categories: location.categories,
 								about: location.about,
@@ -1848,7 +1853,7 @@
 		map.setCenter(coordinates)
 		map.setZoom(19)
 		map.setMapTypeId('hybrid')
-		map.panBy(100,0)
+		// map.panBy(100,0)
 
 		// console.log(placeMarkerInfo)
 
@@ -1920,7 +1925,9 @@
 
 			    //PARKING DISPLAY
 
-			    	if(placeMarkerParking.lot === 1){
+			    if(placeMarkerParking !== undefined){			   
+
+			    	if(placeMarkerParking.lot === 1 ){
 
 			    		var parkingLot = "Yes"
 			    	}
@@ -1947,16 +1954,25 @@
 			    		parkingValet = "No"
 			    	}
 
+			    }
+
+			   	else{
+
+			   		parkingLot = 'No'
+			   		parkingStreet = 'No'
+			   		parkingValet = 'No'
+
+			   	}
 					var locationMarkerContent = 
 						`
 							<div class="placeInfoWindowStyle">
 								<div class="placeInfoWindowTitleContainer">
 									<h3 class="placeInfoWindowTitle">${placeMarkerInfo.title}</h3>
 								</div>
-									<div id="placeAddress">
-										<p>${locationAddress}</p>
-										<img id="currentStateImg" src="${currentStateImg}" alt="" />
-									</div>
+								<div id="placeAddress">
+									<p>${locationAddress}</p>
+									<img id="currentStateImg" src="${currentStateImg}" alt="" />
+								</div>
 								<div id="placeInfoWindowRightContainer">
 									<img src="${locationPhoto}" alt="" />
 								</div>
@@ -1983,10 +1999,6 @@
 
 					   	iwBackground.children(':nth-child(4)').css({'display' : 'none'})
 
-					   	iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
-
-					   	iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
-
 					   	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1', 'background-color' : '#2A2A2A', 'border' : '1px solid grey'});
 
 
@@ -1997,7 +2009,7 @@
 						  padding: '.4rem',
 						  textAlign: 'center',
 						  right: '34px', top: '4px', // button repositioning
-						  border: '5px solid black', // increasing button border and new color
+						  border: '5px solid #282828', // increasing button border and new color
 						  'border-radius': '13px', // circular effect
 						  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
 						  });
@@ -2116,9 +2128,9 @@
 								<div class="placeInfoWindowStyle">
 									<div id="parkingInfoWindow">
 										<h3>${marker.title}</h3>
-										<ul id="parkingInfoWindowList">
-											<li>${parkingDistance}</li>
-											<li>${parkingDuration}</li>
+										<ul class="parkingInfoWindowList">
+											<li>Distance: ${parkingDistance}</li>
+											<li>Walking Time: ${parkingDuration}</li>
 										</ul>
 									</div>
 								</div>	
@@ -2126,24 +2138,35 @@
 
 						google.maps.event.addListener(parkingInfoWindow, 'domready', function() {
 
-						   var iwOuter = $('.gm-style-iw')
+	   					var iwOuter = $('.gm-style-iw')
 
-						   var iwCloseBtn = iwOuter.next()
+					   	var iwBackground = iwOuter.prev()
 
-							iwCloseBtn.css({
-							  
-							  opacity: '1', 
-							  color: 'black',
-							  right: '31px', top: '16px', 
+					   	iwBackground.children(':nth-child(2)').css({'display' : 'none'})
 
-							})
+					   	iwBackground.children(':nth-child(4)').css({'display' : 'none'})
 
-						   var iwBackground = iwOuter.prev()
+					   	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1', 'background-color' : '#2A2A2A', 'border' : '1px solid grey'});
 
-						   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
 
-						   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
-						})
+				  		var iwCloseBtn = iwOuter.next()
+
+						iwCloseBtn.css({
+						  opacity: '1', // by default the close button has an opacity of 0.7
+						  padding: '.4rem',
+						  textAlign: 'center',
+						  right: '34px', top: '4px', // button repositioning
+						  border: '5px solid #282828', // increasing button border and new color
+						  'border-radius': '13px', // circular effect
+						  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
+						  });
+
+					   var iwBackground = iwOuter.prev()
+
+					   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+
+					   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+					})
 
 						parkingInfoWindow.setContent(parkingInfoWindowContent)
 						parkingInfoWindow.setPosition(marker.position)
@@ -2159,7 +2182,7 @@
 			map.setMapTypeId('dark')
 			map.setZoom(16)
 
-			map.panBy(100,0)
+			// map.panBy(100,0)
 
 			// console.log('parking data', slicedFilteredParkingData)
 		})
@@ -2373,27 +2396,6 @@
   		centerMarker.setMap(null)
 	}
 
-	// function geoFindMe() {
-
-	//   if (!navigator.geolocation){
-	//     alert('no geolocation info');
-	//     return;
-	//   }
-
-	//   function success(position) {
-	//     var latitude  = position.coords.latitude;
-	//     var longitude = position.coords.longitude;
-
-	//    alert('Latitude is ' + latitude + '° Longitude is ' + longitude + '°');
-
-	//   }
-
-	//   function error() {
-	//     alert("Unable to retrieve your location");
-	//   }
-
-	//   navigator.geolocation.getCurrentPosition(success, error);
-	// }
 
 
 

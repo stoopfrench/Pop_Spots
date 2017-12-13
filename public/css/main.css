@@ -353,7 +353,7 @@ div.gm-tilt {
 
 .restaurantsClusterInfoWindowTitle p {
 	
-	font-size: 1.75rem;
+	font-size: 1.5rem;
 	padding: 10px;
 	margin: 0;
 	color: #444344;
@@ -393,7 +393,6 @@ div.gm-tilt {
 
 	display: block;
 	border: 1px solid #6C6C6C;
-	/*border-bottom-right-radius: .25rem;*/
 	background-color: #5A4BC6;
 	background-image: radial-gradient(circle at center, #7C68FF, #5A4BC6);
 	text-align: center;
@@ -401,7 +400,7 @@ div.gm-tilt {
 
 .entertainmentClusterInfoWindowTitle p {
 
-	font-size: 1.75rem;
+	font-size: 1.5rem;
 	padding: 10px;
 	margin: 0;
 	color: white;
@@ -418,7 +417,7 @@ div.gm-tilt {
 
 .recreationClusterInfoWindowTitle p {
 
-	font-size: 1.75rem;
+	font-size: 1.5rem;
 	padding: 10px;
 	margin: 0;
 	color: white;
@@ -435,7 +434,7 @@ div.gm-tilt {
 
 .shoppingClusterInfoWindowTitle p {
 
-	font-size: 1.75rem;
+	font-size: 1.5rem;
 	padding: 10px;
 	margin: 0;
 	color: white;
@@ -449,10 +448,10 @@ div.placeInfoWindowStyle {
 
 .placeInfoWindowTitleContainer {
 
-	background-color: grey;
-	background-image: radial-gradient(circle at center, #B2B2B2, grey);
-	color: black;
-	border: 1px solid black;
+	/*background-color: grey;*/
+	/*background-image: radial-gradient(circle at center, #B2B2B2, grey);*/
+	color: white;
+	/*border: 1px solid black;*/
 }
 
 .placeInfoWindowStyle {
@@ -484,7 +483,7 @@ div.placeInfoWindowStyle {
 
 .placeInfoWindowTitle {
 
-	padding-top: .75rem;
+	padding: .75rem;
 }
 
 #placeInfoWindowRightContainer {
@@ -492,10 +491,15 @@ div.placeInfoWindowStyle {
 	float: right;	
 }
 
+#placeInfoWindowRightContainer img {
+
+	margin-right: 1rem;
+}
+
 #placeAddress {
 
 	display: inline-block;
-	border: 1px solid grey;
+	/*border: 1px solid grey;*/
 	border-radius: .25rem;
 	padding: .25rem;
 	max-width: 200px;
@@ -519,7 +523,7 @@ img#currentStateImg {
 #placeParkingInfoList{
 
 	list-style: none;
-	text-align: center;
+	/*text-align: center;*/
 	font-size: 16px;
 	padding: 0;
 }
@@ -531,13 +535,29 @@ img#currentStateImg {
 
 #placeParkingButton {
 
-	border-top: 1px solid grey;
-	margin-top: .5rem;
+	margin-top: .75rem;
+	padding-top: .5rem;
+	color: white;
+	
 }
 
 #placeParkingButton button {
 
-	margin: .25rem;
+	margin-bottom: 1rem;
+	border: 1px solid grey;
+	background-color: #E6E6E6;
+	height: 40px;
+	font-weight: 500;
+	font-size: 1rem;
+	border-radius: .25rem;
+	/*color: white;*/
+}
+
+.parkingInfoWindowList {
+
+	list-style: none;
+	padding: 0;
+	margin: 1rem;
 }
 
 .sidenav {
@@ -591,7 +611,7 @@ div#showOnMapButton {
 
 	cursor: pointer;
 	filter: contrast(150%);
-	border: 0;
+	border: 1px solid white;
 	/*border-radius: 1.5rem;*/
 	/*opacity: 0.8;*/
 }
