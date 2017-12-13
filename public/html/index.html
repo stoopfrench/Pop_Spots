@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+		<link rel='stylesheet' type="text/css" href="../css/main.css">
+		<title>Hot Spots</title>
+    </head>
+    <body>
+<!-- FOCUS WINDOW -->
+    	<div id="focusWindow" class="sidenav">
+    		<a href="javascript:void(0)" class="closebtn" onclick="closeFocusWindow()">&times;</a>
+    		<img id="focusWindowPhoto" src="" alt="">
+    		<h4 id="focusWindowName"></h4>
+    		<h6 id="focusWindowCategories"></h6>
+    		<p id="focusWindowPhone"></p>
+    		<a id="focusWindowWebsite" href="" target="_blank"><img src="/images/website_icon.png" alt="visit website"></a>
+    		<a id="focusWindowFacebook" href="" target="_blank"><img src="/images/fb_icon.png" alt="facebook"></a>
+    		<hr>
+    		<div id="focusWindowHours">
+	    		<h6 id="focusWindowHoursTitle">Hours</h6>
+	    		<ul id="focusWindowHoursList"></ul>
+    		</div>
+    		<hr>
+    		<div id="focusWindowDescriptionContainer">
+    			<h6 id="focusWindowDescriptionTitle">Description</h6>
+    			<p id="focusWindowDescription"></p>
+    		</div>
+    		<hr>
+    		<div id="showOnMapButton"></div>
+    		<!-- <img id="backToMapButton" src="/images/back_icon.png" onclick="resetZoom()"> -->
+    	</div>
+
+<!-- MAP -->
+		<div id="main" class="container-fluid">
+			<div class="row">
+				<div id="map" class="col-12"></div>
+				<div id="mapControl">
+					<div class="btn-group" role="group" aria-label="Button Group">
+					  <button id="hideButton" value="" type="button" class="btn btn-secondary">hide</button>
+					  <button id="resetZoomButton" type="button" class="btn btn-secondary">reset zoom</button>
+					  <button id="showAreaButton" onclick="toggleShowSearchArea()" type="button" class="btn btn-secondary">&#9737;</button>
+					</div>
+            	</div>
+        <!-- LEGEND -->
+				<div id="legend">
+					<div id="legendContainer">
+	                     <div class="form-check">
+	                      <label class="form-check-label">
+	                        <input id="foodCheckbox" class="form-check-input" checked="checked" type="checkbox" onchange="toggleRestaurants()" value="">
+	                        Food/Beverage
+	                        <img src="/images/food_icon_MINI.png" alt="">
+	                      </label>
+	                    </div>	                    
+	                    <div class="form-check">
+	                      <label class="form-check-label">
+	                        <input id="shoppingCheckbox" class="form-check-input" checked="checked" type="checkbox" onchange="toggleShopping()" value="">
+	                        Shopping/Retail
+	                        <img src="/images/shopping_icon_MINI.png">
+	                      </label>
+	                    </div>
+	                    <div class="form-check">
+	                      <label class="form-check-label">
+	                        <input id="artsCheckbox" class="form-check-input" checked="checked" type="checkbox" onchange="toggleEntertainment()" value="">
+	                        Arts/Entertainment
+	                        <img src="/images/entertainment_icon_MINI.png">
+	                      </label>
+	                    </div>
+	                    <div class="form-check">
+	                      <label class="form-check-label">
+	                        <input id="fitnessCheckbox" class="form-check-input" checked="checked" type="checkbox" onchange="toggleRecreation()" value="">
+	                        Fitness/Recreation
+	                        <img src="/images/fitness_icon_MINI.png">	
+	                      </label>
+	                    </div>
+	                 </div>
+                    <div class="divider"></div>
+                    <button id="newSearchButton" type="button">Search New Place</button>
+                 	<div class="divider"></div>
+            	</div>
+			</div>
+		</div>
+
+<!-- LOCATION INPUT MODAL -->
+		<div class="modal fade modal-lg" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		  <div class="modal-dialog modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header" >
+		        <h1 class="modal-title" id="searchModalLabel">Pop Spots</h1>
+		      </div>
+		      <div class="modal-body"> 
+		        <form id="submitLocationForm">
+	       			<input id="locationTextField" onfocus="this.value=''" type="text" size="50" placeholder="Search an Area, City, Neighborhood">
+			        <input id="viewMapButton" type="button" class="btn btn-secondary" data-dismiss="modal" value="View Map">
+				</form>
+		      </div>
+		      <div class="modal-footer">
+		      	<p>Pop Spots is an app that will help you find the most popular spots in a City, Town, Neighborhood etc.  Simply type your destination into the input and Pop Spots will search every establishment in a 2 mile radius and display the results for the 10 most popular places.  As an added benefit, once you pick your favorite place you can search for parking structures around the location.</p>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerclustererplus/src/markerclusterer.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANBuE2TwMbzvjK2EIc3cWxtkmFtKsLLr8&libraries=places&callback=initMap" async defer></script>
+
+<script src="/js/main.js"></script>
+
+
+    </body>
+</html>
