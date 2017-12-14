@@ -314,10 +314,6 @@
 			},
 			scaleControl: true,
 			scrollwheel: false,
-			// zoomControl: true,
-			// zoomControlOptions: {
-			// 	position: google.maps.ControlPosition.LEFT_CENTER,
-			// },
 			rotateControl: true,
 			rotateControlOptions: {
 				position: google.maps.ControlPosition.LEFT_CENTER,
@@ -836,7 +832,7 @@
 								position: new google.maps.LatLng(location.lat, location.lng),
 								center: `{lat: ${location.lat}, lng: ${location.lng}}`,
 								visible: true,
-								icon: ' /images/marker_red.png',
+								icon: '/images/marker_red.png',
 								title: location.name,
 								categories: location.categories,
 								about: location.about,
@@ -1853,7 +1849,6 @@
 		map.setCenter(coordinates)
 		map.setZoom(19)
 		map.setMapTypeId('hybrid')
-		// map.panBy(100,0)
 
 		// console.log(placeMarkerInfo)
 

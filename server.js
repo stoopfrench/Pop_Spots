@@ -11,6 +11,8 @@ const app = express()
 
 app.use(express.static('./public'))
 
+//SERVE INDEX HTML =========================================================================
+
 app.get('/', function(req, res) {
 
     res.sendFile('./public/html/index.html', {root:'./'})
@@ -24,15 +26,15 @@ var googleKey = secrets.googleKey
 
 app.get('/search', function(req, res){
 
-	console.log(req.query)
+	// console.log(req.query)
 
 	var googlePlaceApi = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.query.query}&key=${googleKey}`
 
 	request(googlePlaceApi, function(err, response, googleDataFromServer){
 
-		// console.log(err)
+		console.log('google place location search ERROR ', err)
 
-		console.log(response)
+		// console.log(response)
 
 		// console.log(googleDataFromServer)
 
@@ -44,11 +46,17 @@ app.get('/search', function(req, res){
 
 app.get('/place', function(req, res){
 
-	console.log(req.query)
+	// console.log(req.query)
 
 	var googlePlaceSearchApi = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.query.query}&location=${req.query.location}&key=${googleKey}`
 
 	request(googlePlaceSearchApi, function(err, response, googlePlaceSearchDataFromServer){
+
+		console.log('google place details search ERROR ', err)
+
+		// console.log(response)
+
+		// console.log(googlePlaceSearchDataFromServer)
 
 		res.send(googlePlaceSearchDataFromServer)
 
@@ -58,11 +66,17 @@ app.get('/place', function(req, res){
 
 app.get('/parking', function(req, res){
 
-	console.log(req.query)
+	// console.log(req.query)
 
 	var googleNearBySearchApi = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${req.query.location}&radius=800&type=parking&key=${googleKey}`
 
 	request(googleNearBySearchApi, function(err, response, googleNearByDataFromServer){
+
+		console.log('google parking search ERROR ', err)
+
+		// console.log(response)
+
+		// console.log(googleNearByDataFromServer)
 
 		res.send(googleNearByDataFromServer)
 
@@ -77,6 +91,12 @@ app.get('/distance', function(req, res){
 	var googleDistanceMatrixApi = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${req.query.origins}&destinations=place_id:${req.query.destinations}&mode=walking&key=${googleKey}`
 
 	request(googleDistanceMatrixApi, function(err, response, googleDistanceMatrixDataFromServer){
+
+		console.log('google distance matrix ERROR ', err)
+
+		// console.log(response)
+
+		// console.log(googleDistanceMatrixDataFromServer)
 
 		res.send(googleDistanceMatrixDataFromServer)
 
@@ -95,7 +115,7 @@ app.get('/restaurants', function(req, res){
 
 	request(facebookAPI, function(err, response, restaurantsFromServer){
 
-		// console.log(err)
+		console.log('facebook_restaurants ERROR ', err)
 
 		// console.log(response)
 
@@ -113,7 +133,7 @@ app.get('/entertainment', function(req, res){
 
 	request(facebookAPI, function(err, response, entertainmentFromServer){
 
-		// console.log(err)
+		console.log('facebook_entertainment ERROR ', err)
 
 		// console.log(response)
 
@@ -131,7 +151,7 @@ app.get('/recreation', function(req, res){
 
 	request(facebookAPI, function(err, response, recreationFromServer){
 
-		// console.log(err)
+		console.log('facebook_recreation ERROR ', err)
 
 		// console.log(response)
 
@@ -150,9 +170,9 @@ app.get('/shopping', function(req, res){
 
 	request(facebookAPI, function(err, response, shoppingFromServer){
 
-		console.log(err)
+		console.log('facebook_shopping ERROR ', err)
 
-		console.log(response)
+		// console.log(response)
 
 		// console.log(shoppingFromServer)
 
@@ -165,32 +185,32 @@ app.get('/shopping', function(req, res){
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-===-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-try {
-    var httpsConfig = {
-        key: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/fullchain.pem'),
-    }
+// try {
+//     var httpsConfig = {
+//         key: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/privkey.pem'),
+//         cert: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/fullchain.pem'),
+//     }
 
-    var httpsServer = HTTPS.createServer(httpsConfig, app)
-    httpsServer.listen(443, function(){
-    	console.log('running on 443')
-    })
-    var httpApp = express()
-    httpApp.use(function(req, res, next){
-        res.redirect('https://pop-spots.co' + req.url)
-    })
-    httpApp.listen(80)
-}
-catch(e){
-    console.log(e)
-    console.log('could not start HTTPS server')
-    var httpServer = HTTP.createServer(app)
-    httpServer.listen(80)
-}
+//     var httpsServer = HTTPS.createServer(httpsConfig, app)
+//     httpsServer.listen(443, function(){
+//     	console.log('running on 443')
+//     })
+//     var httpApp = express()
+//     httpApp.use(function(req, res, next){
+//         res.redirect('https://pop-spots.co' + req.url)
+//     })
+//     httpApp.listen(80)
+// }
+// catch(e){
+//     console.log(e)
+//     console.log('could not start HTTPS server')
+//     var httpServer = HTTP.createServer(app)
+//     httpServer.listen(80)
+// }
 
-// var port = 8083
+var port = 8083
 
-// app.listen(port, function(){
+app.listen(port, function(){
 
-//     console.log("'HotSpots' running on port " + port)
-// })
+    console.log("'HotSpots' running on port " + port)
+})
