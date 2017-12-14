@@ -2305,6 +2305,14 @@
 
   		clearParkingMarkers()
 
+  		toggleRestaurants()
+
+  		toggleEntertainment()
+
+  		toggleRecreation()
+
+  		toggleShopping()
+
   		if(centerMarker !== null){
   			
   			hideCenterMarker()
