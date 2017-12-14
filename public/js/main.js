@@ -35,6 +35,7 @@
 	var placeMarkerLocation
 	var placeMarkerInfo
 	var placeMarkerParking
+	var placeInfoWindow
 	var placeInfoWindows = []
 	
 	var parkingSearchLat
@@ -2250,6 +2251,11 @@
 	}
 
 	var clearPlaceInfoWindows = function(){
+
+		if(placeInfoWindow !== undefined){
+
+			placeInfoWindow.close()
+		}
 
 		for(var i = 0; i < placeInfoWindows.length; i++){
 
