@@ -31,7 +31,7 @@ hr {
 	background: white;
 }
 
-.container-fluid {
+#main {
 
 	display: block;
 	width: 95vw;
@@ -65,7 +65,7 @@ hr {
 #map {
 
     height: 100vh;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
 	position: relative;
 }
 
@@ -166,6 +166,15 @@ div.modal-content {
 	
 	background-color: #1E1E1E;
     opacity: 0.95 !important;
+}
+
+#searchLocationButton {
+
+	background-color: #4C8EE2;
+	width: 20%;
+	height: 52px;
+	margin-bottom: 12px;
+	margin-left: 1rem;
 }
 
 #viewMapButton {
@@ -291,8 +300,8 @@ button#showAreaButton.btn.btn-secondary {
 .divider {
 
 	border-bottom: 1px solid black;
-	margin-bottom: .5rem;
-	margin-top: .5rem;
+	margin-bottom: .25rem;
+	margin-top: .25rem;
 }
 
 div.gm-style-iw {
@@ -547,7 +556,7 @@ img#currentStateImg {
 
 .sidenav {
     height: 100%;
-    width: 300px; 
+    width: 25vw; 
     position: fixed; 
     z-index: 1; 
     top: 0;
@@ -561,8 +570,8 @@ img#currentStateImg {
     padding: 1rem; 
     padding-top: 30px;
     word-wrap: wrap;
-    border-right: 2px solid #C2C4CA;
-    box-shadow: 1px 0px 1px 0px #C2C4CA;
+    /*border-right: 2px solid #C2C4CA;*/
+    /*box-shadow: 1px 0px 1px 0px #C2C4CA;*/
 }
 
 .sidenav img {
@@ -597,6 +606,8 @@ div#showOnMapButton {
 	cursor: pointer;
 	filter: contrast(150%);
 	border: 1px solid white;
+	width: 80%;
+	height: 10%;
 }
 
 #showOnMapButton img:hover {

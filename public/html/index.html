@@ -10,31 +10,30 @@
     </head>
     <body>
 
-<!-- FOCUS WINDOW -->
-    	<div id="focusWindow" class="sidenav">
-    		<a href="javascript:void(0)" class="closebtn" onclick="closeFocusWindow()">&times;</a>
-    		<img id="focusWindowPhoto" src="" alt="">
-    		<h4 id="focusWindowName"></h4>
-    		<h6 id="focusWindowCategories"></h6>
-    		<p id="focusWindowPhone"></p>
-    		<a id="focusWindowWebsite" href="" target="_blank"><img src="/images/website_icon.png" alt="visit website"></a>
-    		<a id="focusWindowFacebook" href="" target="_blank"><img src="/images/fb_icon.png" alt="facebook"></a>
-    		<!-- <hr> -->
-    		<div id="focusWindowHours">
-	    		<h6 id="focusWindowHoursTitle">Hours</h6>
-	    		<ul id="focusWindowHoursList"></ul>
-    		</div>
-    		<!-- <hr> -->
-    		<div id="focusWindowDescriptionContainer">
-    			<h6 id="focusWindowDescriptionTitle">Description</h6>
-    			<p id="focusWindowDescription"></p>
-    		</div>
-    		<!-- <hr> -->
-    		<div id="showOnMapButton"></div>
-    	</div>
+<!-- LOCATION INPUT MODAL -->
+		<div class="modal fade modal-lg" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		  <div class="modal-dialog modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header" >
+		        <h1 class="modal-title" id="searchModalLabel">Pop Spots</h1>
+		      </div>
+		      <div class="modal-body"> 
+		        <form id="submitLocationForm" onsubmit="submitLocation(event)">
+	       			<input id="locationTextField" onfocus="this.value=''" type="text" size="50" placeholder="Search an Area, City, Neighborhood">
+	       			<input id="searchLocationButton" onclick="submitLocation(event)" type="button" class="btn btn-secondary" value="Search">
+			        <input id="viewMapButton" type="button" class="btn btn-secondary" data-dismiss="modal" value="View Map">
+<!-- 			        <input id="currentLocationButton" class="btn btn-secondary" type="button" onclick="getLocation()"> -->
+				</form>
+		      </div>
+		      <div class="modal-footer">
+		      	<p>Pop Spots is an app that will help you find the most popular spots in a City, Town, Neighborhood etc.  Simply type your destination into the input and Pop Spots will search every establishment in a 2 mile radius and display the results for the 10 most popular places.  As an added benefit, once you pick your favorite place you can search for parking structures around the location.</p>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 
 <!-- MAP -->
-		<div id="main" class="container-fluid">
+		<div id="main" class="container-fluid" >
 			<div class="row">
 				<div id="map" class="col-12"></div>
 				<div id="mapControl">
@@ -79,29 +78,31 @@
 	                 </div>
                     <div class="divider"></div>
                     <button id="newSearchButton" type="button">Search New Place</button>
-                 	<div class="divider"></div>
             	</div>
-			</div>
-		</div>
 
-<!-- LOCATION INPUT MODAL -->
-		<div class="modal fade modal-lg" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-		  <div class="modal-dialog modal-lg" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header" >
-		        <h1 class="modal-title" id="searchModalLabel">Pop Spots</h1>
-		      </div>
-		      <div class="modal-body"> 
-		        <form id="submitLocationForm">
-	       			<input id="locationTextField" onfocus="this.value=''" type="text" size="50" placeholder="Search an Area, City, Neighborhood">
-			        <input id="viewMapButton" type="button" class="btn btn-secondary" data-dismiss="modal" value="View Map">
-				</form>
-		      </div>
-		      <div class="modal-footer">
-		      	<p>Pop Spots is an app that will help you find the most popular spots in a City, Town, Neighborhood etc.  Simply type your destination into the input and Pop Spots will search every establishment in a 2 mile radius and display the results for the 10 most popular places.  As an added benefit, once you pick your favorite place you can search for parking structures around the location.</p>
-		      </div>
-		    </div>
-		  </div>
+           <!-- FOCUS WINDOW -->
+		    	<div id="focusWindow" class="sidenav">
+		    		<a href="javascript:void(0)" class="closebtn" onclick="closeFocusWindow()">&times;</a>
+		    		<img id="focusWindowPhoto" src="" alt="">
+		    		<h4 id="focusWindowName"></h4>
+		    		<h6 id="focusWindowCategories"></h6>
+		    		<p id="focusWindowPhone"></p>
+		    		<a id="focusWindowWebsite" href="" target="_blank"><img src="/images/website_icon.png" alt="visit website"></a>
+		    		<a id="focusWindowFacebook" href="" target="_blank"><img src="/images/fb_icon.png" alt="facebook"></a>
+		    		<!-- <hr> -->
+		    		<div id="focusWindowHours">
+			    		<h6 id="focusWindowHoursTitle">Hours</h6>
+			    		<ul id="focusWindowHoursList"></ul>
+		    		</div>
+		    		<!-- <hr> -->
+		    		<div id="focusWindowDescriptionContainer">
+		    			<h6 id="focusWindowDescriptionTitle">Description</h6>
+		    			<p id="focusWindowDescription"></p>
+		    		</div>
+		    		<!-- <hr> -->
+		    		<div id="showOnMapButton"></div>
+		    	</div>
+			</div>
 		</div>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>

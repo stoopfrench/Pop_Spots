@@ -5,9 +5,11 @@
 		$("#locationTextField").focus()
 	})
 
+	$('#searchLocationButton').show()
 	$('#viewMapButton').hide()
 
 	document.getElementById('focusWindow').style.visibility = "hidden"
+
 
 //GLOBAL VARIABLES
 	var map
@@ -313,7 +315,6 @@
 				style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
 				mapTypeIds: ['hybrid', 'retro', 'dark']
 			},
-			scaleControl: true,
 			scrollwheel: false,
 			rotateControl: true,
 			rotateControlOptions: {
@@ -354,24 +355,26 @@
 			}
 		})
 
-//MAP CONTROL 			
+		//MAP CONTROL 			
 			var control = document.getElementById('mapControl')
 			map.controls[google.maps.ControlPosition.LEFT_TOP].push(control)
 
-//MAP LEGEND
+		//MAP LEGEND
 			var legend = document.getElementById('legend')
 			map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend)
 
 			$('#legend').collapse('show')
 
-//Reset Center when on window resize
+		//Reset Center when on window resize
 
 		window.addEventListener('resize', function(){
 
 			map.setCenter(place.geometry.location)
+
+			checkFocusWindowVisibility()
 		})
 
-//Close InfoWindows when the zoom changes
+		//Close InfoWindows when the zoom changes
 
 		map.addListener('zoom_changed', function(){
 
@@ -380,11 +383,19 @@
 			clearPlaceInfoWindows()	
 		})
 
+		// var geocoder = new google.maps.Geocoder;
+
+  //       document.getElementById('currentLocationButton').addEventListener('click', function() {
+  //         geocodeLatLng(geocoder, map);
+  //       });
+
+
+
 	}//close initMap
 
 //SUBMIT CITY NAME ==============================================================================================================================
 
-	$('#submitLocationForm').on('submit', function(event) {
+	var submitLocation = function(event) {
 		
 		event.preventDefault()
 
@@ -398,6 +409,7 @@
 		var fbShoppingAll = []
 
 
+		$('#searchLocationButton').hide()
 		$('#viewMapButton').show()
 		$('#loadScreen').empty()
 		$('#areaCheckbox').prop('checked', false)
@@ -421,6 +433,8 @@
 		clearParkingInfoWindows()
 
 		clearPlaceInfoWindows()
+
+		checkFocusWindowVisibility()
 
 		if(centerMarker !== null){
 			
@@ -1097,7 +1111,7 @@
 					
 		}) //google request close					
 
-	}) //submit close
+	} //submit close
 
 //CLICK EVENTS ==================================================================================================================================
 
@@ -1106,6 +1120,8 @@
 	$('#newSearchButton').on('click', function(){
 
 		callNewModal()
+		$('#viewMapButton').hide()
+		$('#searchLocationButton').show()
 	})
 
 //RESET ZOOM
@@ -1814,6 +1830,8 @@
 //FOCUS WINDOW ==================================================================================================================================
 
 	function openFocusWindow() {
+
+		checkFocusWindowVisibility()
 	    
 	    if(document.getElementById('focusWindow').style.visibility !== "visible"){
 
@@ -1821,15 +1839,23 @@
 	    }
 
 	    document.getElementById("focusWindow").style.visibility = "visible"
-	    document.getElementById("main").style.width = "79.5vw"
+	    document.getElementById("main").style.width = "75vw"
 	    document.getElementById("main").style.marginRight = "0"
+
+    	google.maps.event.trigger(map, 'resize');
+
 	}
 
 	function closeFocusWindow() {
 
+		checkFocusWindowVisibility()
+
     	document.getElementById('focusWindow').style.visibility = "hidden"
-    	document.getElementById("main").style.width = ""
-    	document.getElementById("main").style.marginRight = ""
+    	document.getElementById('main').style.width = "95vw"
+    	document.getElementById('main').style.margin = 'auto'
+
+    	google.maps.event.trigger(map, 'resize');
+    	// document.getElementById("main").style.marginRight = ""
 	}
 
 //PLACE INFO AND MARKERS ========================================================================================================================
@@ -2327,10 +2353,10 @@
   			
   		map.setCenter(place.geometry.location)
 
- 	  	if(document.getElementById('focusWindow').style.visibility === "visible"){
+ 	  	// if(document.getElementById('focusWindow').style.visibility === "visible"){
 
-	    	map.panBy(100,0)
-    	}
+	    // 	// map.panBy(100,0)
+    	// }
 
 		if(map.getZoom() !== 14) {
   				
@@ -2404,6 +2430,109 @@
 		centerMarker.setVisible(false)
   		centerMarker.setMap(null)
 	}
+
+	var checkFocusWindowVisibility = function(){
+
+			if(document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() > 1024) {
+
+				$('#focusWindow').css('width', '25vw')
+				$('#main').css({
+					'width' : '75vw',
+					'marginLeft' : '25vw',
+					'marginRight' : '0',
+					})
+			}
+
+			else if(document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() > 768 && $(window).width() < 1024) {
+
+				$('#focusWindow').css('width', '35vw')
+				$('#main').css({
+					'width' : '65vw',
+					'marginLeft' : '35vw',
+					'marginRight' : '0',
+					})
+			}
+
+			else if(document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() > 512 && $(window).width() < 768) {
+
+				$('#focusWindow').css('width', '40vw')
+				$('#main').css({
+					'width' : '60vw',
+					'marginLeft' : '40vw',
+					'marginRight' : '0',
+					})
+			}
+
+			else if(document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() < 512) {
+
+				$('#focusWindow').css('width', '50vw')
+				$('#main').css({
+					'width' : '50vw',
+					'marginLeft' : '50vw',
+					'marginRight' : '0',
+					})
+			}
+
+			else {
+
+				$('#main').css({
+					'width' : '95vw',
+					'margin' : 'auto',
+					
+				})
+			}
+	}
+
+	// var currentPosition
+
+	// function getLocation() {
+	    
+	//     if (navigator.geolocation) {
+	        
+	//         var currentLocation = navigator.geolocation.getCurrentPosition(showPosition);
+
+	//         // console.log(position)
+	//     } 
+
+	//     else {
+
+	//         console.log("Geolocation is not supported by this browser.")
+	//     }
+	// }
+	// function showPosition(position) {
+
+	// 	console.log(position)
+
+	// 	currentPosition = `{lat: ${position.coords.latitude}, lng: ${position.coords.longitude}}`
+
+	//     console.log(`Latitude: ${position.coords.latitude} Longitude: ${position.coords.longitude}`) 
+	// }
+
+	// function geocodeLatLng(geocoder, map) {
+        
+ //        // var input = currentPosition
+        
+ //        // var latlngStr = input.split(',', 2);
+        
+ //        // var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+        
+ //        geocoder.geocode({'location': currentPosition}, function(results, status) {
+          
+ //          if (status === 'OK') {
+            
+ //            if (results[0]) {
+
+ //              console.log('SUCCESS current place: ', results[0].formatted_address)
+   
+ //            } else {
+ //              console.log('No results found');
+ //            }
+ //          } else {
+ //            console.log('Geocoder failed due to: ' + status);
+ //          }
+ //        });
+ //      }
+	
 
 
 
