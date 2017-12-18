@@ -185,32 +185,32 @@ app.get('/shopping', function(req, res){
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-===-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-// try {
-//     var httpsConfig = {
-//         key: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/privkey.pem'),
-//         cert: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/fullchain.pem'),
-//     }
+try {
+    var httpsConfig = {
+        key: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/fullchain.pem'),
+    }
 
-//     var httpsServer = HTTPS.createServer(httpsConfig, app)
-//     httpsServer.listen(443, function(){
-//     	console.log('running on 443')
-//     })
-//     var httpApp = express()
-//     httpApp.use(function(req, res, next){
-//         res.redirect('https://pop-spots.co' + req.url)
-//     })
-//     httpApp.listen(80)
-// }
-// catch(e){
-//     console.log(e)
-//     console.log('could not start HTTPS server')
-//     var httpServer = HTTP.createServer(app)
-//     httpServer.listen(80)
-// }
+    var httpsServer = HTTPS.createServer(httpsConfig, app)
+    httpsServer.listen(443, function(){
+    	console.log('running on 443')
+    })
+    var httpApp = express()
+    httpApp.use(function(req, res, next){
+        res.redirect('https://pop-spots.co' + req.url)
+    })
+    httpApp.listen(80)
+}
+catch(e){
+    console.log(e)
+    console.log('could not start HTTPS server')
+    var httpServer = HTTP.createServer(app)
+    httpServer.listen(80)
+}
 
-var port = 8083
+// var port = 8083
 
-app.listen(port, function(){
+// app.listen(port, function(){
 
-    console.log("'HotSpots' running on port " + port)
-})
+//     console.log("'HotSpots' running on port " + port)
+// })
