@@ -16,6 +16,15 @@
 		console.log('map loaded')
 	})
 
+	var serverCalls = 0
+
+	$(document).ajaxComplete(function(event, xhr, settings) {
+
+		serverCalls++
+
+		console.log('server calls: ', serverCalls)
+	})
+
 	// $(document).ajaxStart(function(event) {
 
 	// 	console.log('ajax start event: ', event)
@@ -469,7 +478,7 @@
 
 			$(document).ajaxComplete(function(event) {
 
-				console.log('google place search complete')
+				// console.log('google place search complete')
 			});
 
 			googleData = JSON.parse(googleData)
@@ -501,8 +510,7 @@
 
 				$(document).ajaxComplete(function(event) {
 
-			  		// console.log('facebook restuarant complete event: ', event)
-			  		console.log('facebook restaurant complete')
+			  		// console.log('facebook restaurant complete')
 				})
 
 				restaurantsFacebookData = JSON.parse(restaurantsFacebookData)
@@ -670,7 +678,7 @@
 
 				$(document).ajaxComplete(function(event) {
 
-			  		console.log('facebook entertainment complete')
+			  		// console.log('facebook entertainment complete')
 				})
 
 				entertainmentFacebookData = JSON.parse(entertainmentFacebookData)
@@ -833,7 +841,7 @@
 
 				$(document).ajaxComplete(function(event) {
 
-			  		console.log('facebook recreation complete')
+			  		// console.log('facebook recreation complete')
 				})
 
 				recreationFacebookData = JSON.parse(recreationFacebookData)
@@ -997,7 +1005,7 @@
 
 				$(document).ajaxComplete(function(event) {
 
-			  		console.log('facebook shopping complete')
+			  		// console.log('facebook shopping complete')
 				})
 
 				shoppingFacebookData = JSON.parse(shoppingFacebookData)
@@ -1991,7 +1999,7 @@
 			    	}
 			    	else{
 			    		
-			    		console.log('no hours info')
+			    		// console.log('no hours info')
 			    	}
 
 			    //PARKING DISPLAY
@@ -2115,174 +2123,186 @@
 		var parkingDistance = null
 		var parkingDuration = null
 
-		hideMarkers()
-
-		clearParkingMarkers()
-
-		placeInfoWindow.close()
 
 		$.get(`/parking?location=${parkingSearchLat},${parkingSearchLng}`, function(googleParkingData, status){
 
 			$(document).ajaxComplete(function(event, xhr, settings) {
 				
-				console.log('google parking complete')
+				// console.log('google parking complete')
 			})
-
-			googleParkingData = JSON.parse(googleParkingData)
-
-			var filteredParkingData = []
-			var slicedFilteredParkingData = []
-
-			for(var i = 0; i < googleParkingData.results.length; i++){
-
-				if(googleParkingData.results[i].types[0] === "parking") {
-
-					filteredParkingData.push(googleParkingData.results[i])
-				}
-
-				if(filteredParkingData.length >= 5){
-
-					slicedFilteredParkingData = filteredParkingData.slice(0,5)
-				}
-
-				else{
-
-					slicedFilteredParkingData = filteredParkingData
-				}
-			}
-
-			parkingMarkers = slicedFilteredParkingData.map(function(location, i) {
 				
-				return new google.maps.Marker({
-					map: map,
-					position: new google.maps.LatLng(location.geometry.location),
-					icon: '/images/parking_icon.png',
-					title: location.name,
-					id: location.place_id,
-					visible: true,
-				})
-			})
+				googleParkingData = JSON.parse(googleParkingData)
 
-			centerMarker = new google.maps.Marker({
+				var filteredParkingData = []
+				var slicedFilteredParkingData = []
 
-					map: map,
-					position: new google.maps.LatLng({
-					lat: parkingSearchLat,
-					lng: parkingSearchLng
-					}),
-					icon: '/images/target_icon.png',
-					visible: true
-			})
+				for(var i = 0; i < googleParkingData.results.length; i++){
 
-			centerMarkers.push(centerMarker)
+					if(googleParkingData.results[i].types[0] === "parking") {
 
-			centerMarker.addListener('click', function(){
+						filteredParkingData.push(googleParkingData.results[i])
+					}
 
-				placeInfoWindow.open(map)
-			})
+					if(filteredParkingData.length >= 5){
 
-			parkingMarkers.forEach(function(marker){
+						slicedFilteredParkingData = filteredParkingData.slice(0,5)
+					}
 
-				marker.addListener('click', function(){
+					else{
 
-					$.get(`/distance?origins=${parkingSearchLat},${parkingSearchLng}&destinations=${marker.id}`, function(googleParkingDistanceData, status){
+						slicedFilteredParkingData = filteredParkingData
+					}
+				}
 
-						googleParkingDistanceData = JSON.parse(googleParkingDistanceData)
+				if (slicedFilteredParkingData.length > 0) {
+				
+					hideMarkers()
 
-						parkingDistance = googleParkingDistanceData.rows[0].elements[0].distance.text
-						parkingDuration = googleParkingDistanceData.rows[0].elements[0].duration.text
+					clearParkingMarkers()
 
-						// console.log(googleParkingDistanceData)
+					placeInfoWindow.close()
 
-						clearParkingInfoWindows()
-
-						parkingInfoWindow = new google.maps.InfoWindow({
-							maxWidth: 300,
-							pixelOffset: new google.maps.Size(0,-35),
+					parkingMarkers = slicedFilteredParkingData.map(function(location, i) {
+						
+						return new google.maps.Marker({
+							map: map,
+							position: new google.maps.LatLng(location.geometry.location),
+							icon: '/images/parking_icon.png',
+							title: location.name,
+							id: location.place_id,
+							visible: true,
 						})
-
-						var parkingInfoWindowContent = `
-								
-								<div class="placeInfoWindowStyle">
-									<div id="parkingInfoWindow">
-										<h3>${marker.title}</h3>
-										<ul class="parkingInfoWindowList">
-											<li>Distance: ${parkingDistance}</li>
-											<li>Walking Time: ${parkingDuration}</li>
-										</ul>
-									</div>
-								</div>	
-							`	
-
-						google.maps.event.addListener(parkingInfoWindow, 'domready', function() {
-
-	   					var iwOuter = $('.gm-style-iw')
-
-					   	var iwBackground = iwOuter.prev()
-
-					   	iwBackground.children(':nth-child(2)').css({'display' : 'none'})
-
-					   	iwBackground.children(':nth-child(4)').css({'display' : 'none'})
-
-					   	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1', 'background-color' : '#2A2A2A', 'border' : '1px solid grey'});
-
-
-				  		var iwCloseBtn = iwOuter.next()
-
-						iwCloseBtn.css({
-						  opacity: '1', // by default the close button has an opacity of 0.7
-						  padding: '.4rem',
-						  textAlign: 'center',
-						  right: '34px', top: '4px', // button repositioning
-						  border: '5px solid #282828', // increasing button border and new color
-						  'border-radius': '13px', // circular effect
-						  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
-						  });
-
-					   var iwBackground = iwOuter.prev()
-
-					   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
-
-					   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
 					})
 
-						parkingInfoWindow.setContent(parkingInfoWindowContent)
-						parkingInfoWindow.setPosition(marker.position)
+					centerMarker = new google.maps.Marker({
 
-						parkingInfoWindows.push(parkingInfoWindow)
-
-						parkingInfoWindow.open(map)
-
+							map: map,
+							position: new google.maps.LatLng({
+							lat: parkingSearchLat,
+							lng: parkingSearchLng
+							}),
+							icon: '/images/target_icon.png',
+							visible: true
 					})
-				})
-			})
 
-			map.setMapTypeId('dark')
-			map.setZoom(16)
+					centerMarkers.push(centerMarker)
 
-			// map.panBy(100,0)
+					centerMarker.addListener('click', function(){
 
-			// console.log('parking data', slicedFilteredParkingData)
-		})
+						placeInfoWindow.open(map)
+					})
 
-			var parkingCircleCenter = {
-				lat: parkingSearchLat,
-				lng: parkingSearchLng
+					parkingMarkers.forEach(function(marker){
+
+						marker.addListener('click', function(){
+
+							$.get(`/distance?origins=${parkingSearchLat},${parkingSearchLng}&destinations=${marker.id}`, function(googleParkingDistanceData, status){
+
+								googleParkingDistanceData = JSON.parse(googleParkingDistanceData)
+
+								parkingDistance = googleParkingDistanceData.rows[0].elements[0].distance.text
+								parkingDuration = googleParkingDistanceData.rows[0].elements[0].duration.text
+
+								// console.log(googleParkingDistanceData)
+
+								clearParkingInfoWindows()
+
+								parkingInfoWindow = new google.maps.InfoWindow({
+									maxWidth: 300,
+									pixelOffset: new google.maps.Size(0,-35),
+								})
+
+								var parkingInfoWindowContent = `
+										
+										<div class="placeInfoWindowStyle">
+											<div id="parkingInfoWindow">
+												<h3>${marker.title}</h3>
+												<ul class="parkingInfoWindowList">
+													<li>Distance: ${parkingDistance}</li>
+													<li>Walking Time: ${parkingDuration}</li>
+												</ul>
+											</div>
+										</div>	
+									`	
+
+								google.maps.event.addListener(parkingInfoWindow, 'domready', function() {
+
+			   					var iwOuter = $('.gm-style-iw')
+
+							   	var iwBackground = iwOuter.prev()
+
+							   	iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+
+							   	iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+
+							   	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1', 'background-color' : '#2A2A2A', 'border' : '1px solid grey'});
+
+
+						  		var iwCloseBtn = iwOuter.next()
+
+								iwCloseBtn.css({
+								  opacity: '1', // by default the close button has an opacity of 0.7
+								  padding: '.4rem',
+								  textAlign: 'center',
+								  right: '34px', top: '4px', // button repositioning
+								  border: '5px solid #282828', // increasing button border and new color
+								  'border-radius': '13px', // circular effect
+								  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
+								  });
+
+							   var iwBackground = iwOuter.prev()
+
+							   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+
+							   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+							})
+
+								parkingInfoWindow.setContent(parkingInfoWindowContent)
+								parkingInfoWindow.setPosition(marker.position)
+
+								parkingInfoWindows.push(parkingInfoWindow)
+
+								parkingInfoWindow.open(map)
+
+							})
+						})
+					})
+
+					map.setMapTypeId('dark')
+					map.setZoom(16)
+
+					// map.panBy(100,0)
+
+					// console.log('parking data', slicedFilteredParkingData)
+				
+				
+					var parkingCircleCenter = {
+						lat: parkingSearchLat,
+						lng: parkingSearchLng
+					}
+
+					parkingSearchCircle = new google.maps.Circle({
+					      
+					      strokeColor: '#FF4B3B',
+					      strokeOpacity: 0.3,
+					      strokeWeight: 3,
+					      fillColor: '#FF4B3B',
+					      fillOpacity: 0.1,
+					      map: map,
+					      center: parkingCircleCenter,
+					      radius: 800,
+					})
+
+					    parkingSearchCircle.setMap(map)
 			}
 
-			parkingSearchCircle = new google.maps.Circle({
-			      
-			      strokeColor: '#FF4B3B',
-			      strokeOpacity: 0.3,
-			      strokeWeight: 3,
-			      fillColor: '#FF4B3B',
-			      fillOpacity: 0.1,
-			      map: map,
-			      center: parkingCircleCenter,
-			      radius: 800,
-			})
+			else {
 
-			    parkingSearchCircle.setMap(map)
+				alert('No Additional Parking Available')
+
+				return
+			}
+		})
 	}
 
 //FUNCTIONS =====================================================================================================================================
