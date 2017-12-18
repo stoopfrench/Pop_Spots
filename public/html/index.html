@@ -14,8 +14,11 @@
 		<div class="modal fade modal-lg" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		  <div class="modal-dialog modal-lg" role="document">
 		    <div class="modal-content">
+	        <button id="modalCloseButton" type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+	        </button>
 		      <div class="modal-header" >
-		        <h1 class="modal-title" id="searchModalLabel">Pop Spots</h1>
+		        	<h1 class="modal-title" id="searchModalLabel">Pop Spots</h1>
 		      </div>
 		      <div class="modal-body"> 
 		        <form id="submitLocationForm" onsubmit="submitLocation(event)">

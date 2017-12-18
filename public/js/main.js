@@ -5,11 +5,28 @@
 		$("#locationTextField").focus()
 	})
 
+	$('#modalCloseButton').hide()
 	$('#searchLocationButton').show()
 	$('#viewMapButton').hide()
 
 	document.getElementById('focusWindow').style.visibility = "hidden"
+  	
+  	window.addEventListener('load', function(){
 
+		console.log('map loaded')
+	})
+
+	// $(document).ajaxStart(function(event) {
+
+	// 	console.log('ajax start event: ', event)
+	// })
+	
+
+  	// $(document).ajaxComplete(function(event) {
+
+  	// 	console.log('ajax complete event: ', event)
+  	// 	console.log('ajax complete')
+  	// })
 
 //GLOBAL VARIABLES
 	var map
@@ -17,6 +34,7 @@
 	var insideText
 	var parkingSearchCircle
 	var centerMarker = null
+	var centerMarkers = []
 
 	var restaurantsMarkers
 	var restaurantsMarkerCluster
@@ -390,7 +408,6 @@
   //       });
 
 
-
 	}//close initMap
 
 //SUBMIT CITY NAME ==============================================================================================================================
@@ -409,6 +426,7 @@
 		var fbShoppingAll = []
 
 
+		$('#modalCloseButton').show()
 		$('#searchLocationButton').hide()
 		$('#viewMapButton').show()
 		$('#loadScreen').empty()
@@ -449,6 +467,11 @@
 
 		$.get(`/search?query=${userinput}`, function(googleData, status) {
 
+			$(document).ajaxComplete(function(event) {
+
+				console.log('google place search complete')
+			});
+
 			googleData = JSON.parse(googleData)
 
 			var latitude = googleData.results[0].geometry.location.lat
@@ -475,6 +498,12 @@
 	//RESTAURANTS ===============================================================================================================================
 
 			$.get(`/restaurants?center=${latitude},${longitude}`, function(restaurantsFacebookData, status) {
+
+				$(document).ajaxComplete(function(event) {
+
+			  		// console.log('facebook restuarant complete event: ', event)
+			  		console.log('facebook restaurant complete')
+				})
 
 				restaurantsFacebookData = JSON.parse(restaurantsFacebookData)
 
@@ -639,6 +668,11 @@
 
 			$.get(`/entertainment?center=${latitude},${longitude}`, function(entertainmentFacebookData, status) {
 
+				$(document).ajaxComplete(function(event) {
+
+			  		console.log('facebook entertainment complete')
+				})
+
 				entertainmentFacebookData = JSON.parse(entertainmentFacebookData)
 
 				for (var i = 0; i < entertainmentFacebookData.data.length; i++) {
@@ -796,6 +830,11 @@
 	//RECREATION ================================================================================================================================
 
 			$.get(`/recreation?center=${latitude},${longitude}`, function(recreationFacebookData, status) {
+
+				$(document).ajaxComplete(function(event) {
+
+			  		console.log('facebook recreation complete')
+				})
 
 				recreationFacebookData = JSON.parse(recreationFacebookData)
 
@@ -955,6 +994,11 @@
 	//SHOPPING ==================================================================================================================================
 
 			$.get(`/shopping?center=${latitude},${longitude}`, function(shoppingFacebookData, status) {
+
+				$(document).ajaxComplete(function(event) {
+
+			  		console.log('facebook shopping complete')
+				})
 
 				shoppingFacebookData = JSON.parse(shoppingFacebookData)
 
@@ -1892,6 +1936,11 @@
 
 		$.get(`/place?query=${placeMarkerInfo.title}&location=${parkingSearchLat},${parkingSearchLng}`, function(googlePlaceSearchData, status){
 
+			$(document).ajaxComplete(function(event) {
+				
+				console.log('google place complete')
+			})
+
 			googlePlaceSearchData = JSON.parse(googlePlaceSearchData)
 
 			// console.log('place search', googlePlaceSearchData)
@@ -1916,7 +1965,7 @@
 
 			    		var random = Math.floor(Math.random() * locationDetails.photos.length)
 
-			    		var locationPhoto = locationDetails.photos[random].getUrl({'maxWidth': 250, 'maxHeight': 200})
+			    		var locationPhoto = locationDetails.photos[random].getUrl({'maxWidth': 250, 'maxHeight': 175})
 			    	}
 
 			    	var currentState
@@ -2074,6 +2123,11 @@
 
 		$.get(`/parking?location=${parkingSearchLat},${parkingSearchLng}`, function(googleParkingData, status){
 
+			$(document).ajaxComplete(function(event, xhr, settings) {
+				
+				console.log('google parking complete')
+			})
+
 			googleParkingData = JSON.parse(googleParkingData)
 
 			var filteredParkingData = []
@@ -2119,6 +2173,8 @@
 					icon: '/images/target_icon.png',
 					visible: true
 			})
+
+			centerMarkers.push(centerMarker)
 
 			centerMarker.addListener('click', function(){
 
@@ -2427,8 +2483,13 @@
 
 	var hideCenterMarker = function(){
 
-		centerMarker.setVisible(false)
-  		centerMarker.setMap(null)
+ 		for(var i in centerMarkers) {
+			 
+			centerMarkers[i].setVisible(false)
+  			centerMarkers[i].setMap(null)
+  		}
+
+  		centerMarkers = []
 	}
 
 	var checkFocusWindowVisibility = function(){
