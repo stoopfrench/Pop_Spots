@@ -2564,55 +2564,7 @@
 			}
 	}
 
-	// var currentPosition
 
-	// function getLocation() {
-	    
-	//     if (navigator.geolocation) {
-	        
-	//         var currentLocation = navigator.geolocation.getCurrentPosition(showPosition);
-
-	//         // console.log(position)
-	//     } 
-
-	//     else {
-
-	//         console.log("Geolocation is not supported by this browser.")
-	//     }
-	// }
-	// function showPosition(position) {
-
-	// 	console.log(position)
-
-	// 	currentPosition = `{lat: ${position.coords.latitude}, lng: ${position.coords.longitude}}`
-
-	//     console.log(`Latitude: ${position.coords.latitude} Longitude: ${position.coords.longitude}`) 
-	// }
-
-	// function geocodeLatLng(geocoder, map) {
-        
- //        // var input = currentPosition
-        
- //        // var latlngStr = input.split(',', 2);
-        
- //        // var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
-        
- //        geocoder.geocode({'location': currentPosition}, function(results, status) {
-          
- //          if (status === 'OK') {
-            
- //            if (results[0]) {
-
- //              console.log('SUCCESS current place: ', results[0].formatted_address)
-   
- //            } else {
- //              console.log('No results found');
- //            }
- //          } else {
- //            console.log('Geocoder failed due to: ' + status);
- //          }
- //        });
- //      }
 	
 
 
