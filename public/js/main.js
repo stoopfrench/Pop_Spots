@@ -22,7 +22,7 @@
 
 		serverCalls++
 
-		console.log('server calls: ', serverCalls)
+		// console.log('server calls: ', serverCalls)
 	})
 
 	// $(document).ajaxStart(function(event) {
@@ -1946,7 +1946,7 @@
 
 			$(document).ajaxComplete(function(event) {
 				
-				console.log('google place complete')
+				// console.log('google place complete')
 			})
 
 			googlePlaceSearchData = JSON.parse(googlePlaceSearchData)

@@ -240,7 +240,7 @@ div.modal-content {
    background-color: white;
    box-shadow: 0px 0px 1px 1px grey;
    font-size: 12px;
-   width: 158px;
+   width: 160px;
 }
 
 #legend button {
@@ -299,7 +299,7 @@ div.modal-content {
 button#showAreaButton.btn.btn-secondary {
 
 	padding: 0;
-	width: 29px;
+	width: 31px;
 	outline: none;	
 	border: 1px solid black;
     box-shadow: 0px 0px 1px 1px grey;
@@ -554,6 +554,18 @@ img#currentStateImg {
 	font-weight: 500;
 	font-size: 1rem;
 	border-radius: .25rem;
+	outline-style: none;
+}
+
+#placeParkingButton button:hover {
+
+	color: red;
+}
+
+#placeParkingButton button:active {
+
+	background-color: #CECECE;
+	box-shadow: 0px 0px 10px black;
 }
 
 .parkingInfoWindowList {

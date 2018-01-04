@@ -1,9 +1,9 @@
 
 const express = require('express')
 const request = require('request')
-var HTTP = require('http')
-var HTTPS = require('https')
-var fs = require('fs')
+const HTTP = require('http')
+const HTTPS = require('https')
+const fs = require('fs')
 
 var secrets = require('./secrets.js')
 
