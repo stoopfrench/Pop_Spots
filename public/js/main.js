@@ -1,4 +1,4 @@
-
+$(document).ready(function(){
 //SHOW LANDING MODAL	
 	$('.modal').modal('show')
 	$('.modal').on('shown.bs.modal', function() {
@@ -9,6 +9,7 @@
 	$('#searchLocationButton').show()
 	$('#viewMapButton').hide()
 
+
 	document.getElementById('focusWindow').style.visibility = "hidden"
   	
   	window.addEventListener('load', function(){
@@ -16,14 +17,14 @@
 		console.log('map loaded')
 	})
 
-	var serverCalls = 0
+	// var serverCalls = 0
 
-	$(document).ajaxComplete(function(event, xhr, settings) {
+	// $(document).ajaxComplete(function(event, xhr, settings) {
 
-		serverCalls++
+	// 	serverCalls++
 
-		// console.log('server calls: ', serverCalls)
-	})
+	// 	// console.log('server calls: ', serverCalls)
+	// })
 
 	// $(document).ajaxStart(function(event) {
 
@@ -36,7 +37,7 @@
   	// 	console.log('ajax complete event: ', event)
   	// 	console.log('ajax complete')
   	// })
-
+})
 //GLOBAL VARIABLES
 	var map
 	var place
