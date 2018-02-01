@@ -1,2050 +1,2000 @@
-$(document).ready(function(){
-//SHOW LANDING MODAL	
-	$('.modal').modal('show')
-	$('.modal').on('shown.bs.modal', function() {
-		$("#locationTextField").focus()
-	})
+$(document).ready(function() {
+    //SHOW LANDING MODAL	
+    $('.modal').modal('show')
+    $('.modal').on('shown.bs.modal', function() {
+        $("#locationTextField").focus()
+    })
 
-	$('#modalCloseButton').hide()
-	$('#searchLocationButton').show()
-	$('#viewMapButton').hide()
+    $('#modalCloseButton').hide()
+    $('#searchLocationButton').show()
+    $('#viewMapButton').hide()
 
 
-	document.getElementById('focusWindow').style.visibility = "hidden"
-  	
-  	window.addEventListener('load', function(){
+    document.getElementById('focusWindow').style.visibility = "hidden"
 
-		console.log('map loaded')
-	})
+    window.addEventListener('load', function() {
 
-	// var serverCalls = 0
+        console.log('map loaded')
+    })
 
-	// $(document).ajaxComplete(function(event, xhr, settings) {
+    // var serverCalls = 0
 
-	// 	serverCalls++
+    // $(document).ajaxComplete(function(event, xhr, settings) {
 
-	// 	// console.log('server calls: ', serverCalls)
-	// })
+    // 	serverCalls++
 
-	// $(document).ajaxStart(function(event) {
+    // 	// console.log('server calls: ', serverCalls)
+    // })
 
-	// 	console.log('ajax start event: ', event)
-	// })
-	
+    // $(document).ajaxStart(function(event) {
 
-  	// $(document).ajaxComplete(function(event) {
+    // 	console.log('ajax start event: ', event)
+    // })
 
-  	// 	console.log('ajax complete event: ', event)
-  	// 	console.log('ajax complete')
-  	// })
+
+    // $(document).ajaxComplete(function(event) {
+
+    // 	console.log('ajax complete event: ', event)
+    // 	console.log('ajax complete')
+    // })
 })
+
 //GLOBAL VARIABLES
-	var map
-	var place
-	var insideText
-	var parkingSearchCircle
-	var centerMarker = null
-	var centerMarkers = []
+var map
+var place
+var insideText
+var parkingSearchCircle
+var centerMarker = null
+var centerMarkers = []
 
-	var restaurantsMarkers
-	var restaurantsMarkerCluster
-	var restaurantsInfoWindows = []
+var restaurantsMarkers
+var restaurantsMarkerCluster
+var restaurantsInfoWindows = []
 
-	var entertainmentMarkers
-	var entertainmentMarkerCluster
-	var entertainmentInfoWindows = []
+var entertainmentMarkers
+var entertainmentMarkerCluster
+var entertainmentInfoWindows = []
 
-	var recreationMarkers
-	var recreationMarkerCluster
-	var recreationInfoWindows = []
+var recreationMarkers
+var recreationMarkerCluster
+var recreationInfoWindows = []
 
-	var shoppingMarkers
-	var shoppingMarkerCluster
-	var shoppingInfoWindows = []
+var shoppingMarkers
+var shoppingMarkerCluster
+var shoppingInfoWindows = []
 
-	var placeMarkerLocation
-	var placeMarkerInfo
-	var placeMarkerParking
-	var placeInfoWindow
-	var placeInfoWindows = []
-	
-	var parkingSearchLat
-	var parkingSearchLng
-	var parkingMarkers = []
+var placeMarkerLocation
+var placeMarkerInfo
+var placeMarkerParking
+var placeInfoWindow
+var placeInfoWindows = []
 
-	var citySearchCircle
+var parkingSearchLat
+var parkingSearchLng
+var parkingMarkers = []
 
-	var parkingInfoWindow
-	var parkingInfoWindows = []
+var citySearchCircle
+
+var parkingInfoWindow
+var parkingInfoWindows = []
 
 
 //INITIALIZE GOOGLE MAP =========================================================================================================================
-	
-	function initMap() {
 
-		var retroStyle = new google.maps.StyledMapType(
-			[
-				{
-					elementType: 'geometry',
-					stylers: [{
-						color: '#ebe3cd'
-					}]
-				},
-				{
-					elementType: 'labels.text.fill',
-					stylers: [{
-						color: '#523735'
-					}]
-				},
-				{
-					elementType: 'labels.text.stroke',
-					stylers: [{
-						color: '#f5f1e6'
-					}]
-				},
-				{
-					featureType: 'administrative',
-					elementType: 'geometry.stroke',
-					stylers: [{
-						color: '#c9b2a6'
-					}]
-				},
-				{
-					featureType: 'administrative.land_parcel',
-					elementType: 'geometry.stroke',
-					stylers: [{
-						color: '#dcd2be'
-					}]
-				},
-				{
-					featureType: 'administrative.land_parcel',
-					elementType: 'labels.text.fill',
-					stylers: [{
-						color: '#ae9e90'
-					}]
-				},
-				{
-					featureType: 'landscape.natural',
-					elementType: 'geometry',
-					stylers: [{
-						color: '#dfd2ae'
-					}]
-				},
-				{
-					featureType: 'poi',
-					elementType: 'geometry',
-					stylers: [{
-						color: '#dfd2ae'
-					}]
-				},
-				{
-					featureType: 'poi',
-					elementType: 'labels.text.fill',
-					stylers: [{
-						color: '#93817c'
-					}]
-				},
-				{
-					featureType: 'poi.park',
-					elementType: 'geometry.fill',
-					stylers: [{
-						color: '#a5b076'
-					}]
-				},
-				{
-					featureType: 'poi.park',
-					elementType: 'labels.text.fill',
-					stylers: [{
-						color: '#447530'
-					}]
-				},
-				{
-					featureType: 'road',
-					elementType: 'geometry',
-					stylers: [{
-						color: '#f5f1e6'
-					}]
-				},
-				{
-					featureType: 'road.arterial',
-					elementType: 'geometry',
-					stylers: [{
-						color: '#fdfcf8'
-					}]
-				},
-				{
-					featureType: 'road.highway',
-					elementType: 'geometry',
-					stylers: [{
-						color: '#f8c967'
-					}]
-				},
-				{
-					featureType: 'road.highway',
-					elementType: 'geometry.stroke',
-					stylers: [{
-						color: '#e9bc62'
-					}]
-				},
-				{
-					featureType: 'road.highway.controlled_access',
-					elementType: 'geometry',
-					stylers: [{
-						color: '#e98d58'
-					}]
-				},
-				{
-					featureType: 'road.highway.controlled_access',
-					elementType: 'geometry.stroke',
-					stylers: [{
-						color: '#db8555'
-					}]
-				},
-				{
-					featureType: 'road.local',
-					elementType: 'labels.text.fill',
-					stylers: [{
-						color: '#806b63'
-					}]
-				},
-				{
-					featureType: 'transit.line',
-					elementType: 'geometry',
-					stylers: [{
-						color: '#dfd2ae'
-					}]
-				},
-				{
-					featureType: 'transit.line',
-					elementType: 'labels.text.fill',
-					stylers: [{
-						color: '#8f7d77'
-					}]
-				},
-				{
-					featureType: 'transit.line',
-					elementType: 'labels.text.stroke',
-					stylers: [{
-						color: '#ebe3cd'
-					}]
-				},
-				{
-					featureType: 'transit.station',
-					elementType: 'geometry',
-					stylers: [{
-						color: '#dfd2ae'
-					}]
-				},
-				{
-					featureType: 'water',
-					elementType: 'geometry.fill',
-					stylers: [{
-						color: '#b9d3c2'
-					}]
-				},
-				{
-					featureType: 'water',
-					elementType: 'labels.text.fill',
-					stylers: [{
-						color: '#92998d' 
-					}]
-				}
-			], {
-				name: 'Light'
-			});
+function initMap() {
 
-		var darkStyle = new google.maps.StyledMapType(
+    var retroStyle = new google.maps.StyledMapType(
+        [{
+                elementType: 'geometry',
+                stylers: [{
+                    color: '#ebe3cd'
+                }]
+            },
+            {
+                elementType: 'labels.text.fill',
+                stylers: [{
+                    color: '#523735'
+                }]
+            },
+            {
+                elementType: 'labels.text.stroke',
+                stylers: [{
+                    color: '#f5f1e6'
+                }]
+            },
+            {
+                featureType: 'administrative',
+                elementType: 'geometry.stroke',
+                stylers: [{
+                    color: '#c9b2a6'
+                }]
+            },
+            {
+                featureType: 'administrative.land_parcel',
+                elementType: 'geometry.stroke',
+                stylers: [{
+                    color: '#dcd2be'
+                }]
+            },
+            {
+                featureType: 'administrative.land_parcel',
+                elementType: 'labels.text.fill',
+                stylers: [{
+                    color: '#ae9e90'
+                }]
+            },
+            {
+                featureType: 'landscape.natural',
+                elementType: 'geometry',
+                stylers: [{
+                    color: '#dfd2ae'
+                }]
+            },
+            {
+                featureType: 'poi',
+                elementType: 'geometry',
+                stylers: [{
+                    color: '#dfd2ae'
+                }]
+            },
+            {
+                featureType: 'poi',
+                elementType: 'labels.text.fill',
+                stylers: [{
+                    color: '#93817c'
+                }]
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'geometry.fill',
+                stylers: [{
+                    color: '#a5b076'
+                }]
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'labels.text.fill',
+                stylers: [{
+                    color: '#447530'
+                }]
+            },
+            {
+                featureType: 'road',
+                elementType: 'geometry',
+                stylers: [{
+                    color: '#f5f1e6'
+                }]
+            },
+            {
+                featureType: 'road.arterial',
+                elementType: 'geometry',
+                stylers: [{
+                    color: '#fdfcf8'
+                }]
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'geometry',
+                stylers: [{
+                    color: '#f8c967'
+                }]
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'geometry.stroke',
+                stylers: [{
+                    color: '#e9bc62'
+                }]
+            },
+            {
+                featureType: 'road.highway.controlled_access',
+                elementType: 'geometry',
+                stylers: [{
+                    color: '#e98d58'
+                }]
+            },
+            {
+                featureType: 'road.highway.controlled_access',
+                elementType: 'geometry.stroke',
+                stylers: [{
+                    color: '#db8555'
+                }]
+            },
+            {
+                featureType: 'road.local',
+                elementType: 'labels.text.fill',
+                stylers: [{
+                    color: '#806b63'
+                }]
+            },
+            {
+                featureType: 'transit.line',
+                elementType: 'geometry',
+                stylers: [{
+                    color: '#dfd2ae'
+                }]
+            },
+            {
+                featureType: 'transit.line',
+                elementType: 'labels.text.fill',
+                stylers: [{
+                    color: '#8f7d77'
+                }]
+            },
+            {
+                featureType: 'transit.line',
+                elementType: 'labels.text.stroke',
+                stylers: [{
+                    color: '#ebe3cd'
+                }]
+            },
+            {
+                featureType: 'transit.station',
+                elementType: 'geometry',
+                stylers: [{
+                    color: '#dfd2ae'
+                }]
+            },
+            {
+                featureType: 'water',
+                elementType: 'geometry.fill',
+                stylers: [{
+                    color: '#b9d3c2'
+                }]
+            },
+            {
+                featureType: 'water',
+                elementType: 'labels.text.fill',
+                stylers: [{
+                    color: '#92998d'
+                }]
+            }
+        ], {
+            name: 'Light'
+        });
 
-			[
-		          {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
-		          {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
-		          {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
-		          {
-		            featureType: 'administrative.locality',
-		            elementType: 'labels.text.fill',
-		            stylers: [{color: '#C7B3CE'}]
-		          },
-		          {
-		            featureType: 'poi',
-		            elementType: 'labels.text.fill',
-		            stylers: [{color: '#CCC4CD'}]
-		          },
-		          {
-		            featureType: 'poi.park',
-		            elementType: 'geometry',
-		            stylers: [{color: '#2D484C'}]
-		          },
-		          {
-		            featureType: 'poi.park',
-		            elementType: 'labels.text.fill',
-		            stylers: [{color: '#6b9a76'}]
-		          },
-		          {
-		            featureType: 'road',
-		            elementType: 'geometry',
-		            stylers: [{color: '#38414e'}]
-		          },
-		          {
-		            featureType: 'road',
-		            elementType: 'geometry.stroke',
-		            stylers: [{color: '#212a37'}]
-		          },
-		          {
-		            featureType: 'road',
-		            elementType: 'labels.text.fill',
-		            stylers: [{color: '#9ca5b3'}]
-		          },
-		          {
-		            featureType: 'road.highway',
-		            elementType: 'geometry',
-		            stylers: [{color: '#746855'}]
-		          },
-		          {
-		            featureType: 'road.highway',
-		            elementType: 'geometry.stroke',
-		            stylers: [{color: '#1f2835'}]
-		          },
-		          {
-		            featureType: 'road.highway',
-		            elementType: 'labels.text.fill',
-		            stylers: [{color: '#AD9671'}]
-		          },
-		          {
-		            featureType: 'transit',
-		            elementType: 'geometry',
-		            stylers: [{color: '#2f3948'}]
-		          },
-		          {
-		            featureType: 'transit.station',
-		            elementType: 'labels.text.fill',
-		            stylers: [{color: '#CEC0BC'}]
-		          },
-		          {
-		            featureType: 'water',
-		            elementType: 'geometry',
-		            stylers: [{color: '#39759F'}]
-		          },
-		          {
-		            featureType: 'water',
-		            elementType: 'labels.text.fill',
-		            stylers: [{color: '#515c6d'}]
-		          },
-		          {
-		            featureType: 'water',
-		            elementType: 'labels.text.stroke',
-		            stylers: [{color: '#17263c'}]
-		          }
-		        ],{
-		        	name: 'Dark'
-		        })
+    var darkStyle = new google.maps.StyledMapType(
 
-		map = new google.maps.Map(document.getElementById('map'), {
-			mapTypeControlOptions: {
-				style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-				mapTypeIds: ['hybrid', 'retro', 'dark']
-			},
-			scrollwheel: false,
-			rotateControl: true,
-			rotateControlOptions: {
-				position: google.maps.ControlPosition.LEFT_CENTER,
-			},
-		})
+        [
+            { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
+            { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
+            { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
+            {
+                featureType: 'administrative.locality',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#C7B3CE' }]
+            },
+            {
+                featureType: 'poi',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#CCC4CD' }]
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'geometry',
+                stylers: [{ color: '#2D484C' }]
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#6b9a76' }]
+            },
+            {
+                featureType: 'road',
+                elementType: 'geometry',
+                stylers: [{ color: '#38414e' }]
+            },
+            {
+                featureType: 'road',
+                elementType: 'geometry.stroke',
+                stylers: [{ color: '#212a37' }]
+            },
+            {
+                featureType: 'road',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#9ca5b3' }]
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'geometry',
+                stylers: [{ color: '#746855' }]
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'geometry.stroke',
+                stylers: [{ color: '#1f2835' }]
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#AD9671' }]
+            },
+            {
+                featureType: 'transit',
+                elementType: 'geometry',
+                stylers: [{ color: '#2f3948' }]
+            },
+            {
+                featureType: 'transit.station',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#CEC0BC' }]
+            },
+            {
+                featureType: 'water',
+                elementType: 'geometry',
+                stylers: [{ color: '#39759F' }]
+            },
+            {
+                featureType: 'water',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#515c6d' }]
+            },
+            {
+                featureType: 'water',
+                elementType: 'labels.text.stroke',
+                stylers: [{ color: '#17263c' }]
+            }
+        ], {
+            name: 'Dark'
+        })
 
-		map.mapTypes.set('retro', retroStyle)
-		
-		map.mapTypes.set('dark', darkStyle)
-		
-		map.setMapTypeId('dark')
+    map = new google.maps.Map(document.getElementById('map'), {
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+            mapTypeIds: ['hybrid', 'retro', 'dark']
+        },
+        scrollwheel: false,
+        rotateControl: true,
+        rotateControlOptions: {
+            position: google.maps.ControlPosition.LEFT_CENTER,
+        },
+    })
 
-		map.setTilt(45)
+    map.mapTypes.set('retro', retroStyle)
 
-		var input = document.getElementById('locationTextField')
+    map.mapTypes.set('dark', darkStyle)
 
-		var autocomplete = new google.maps.places.Autocomplete(input)
-		
-		autocomplete.bindTo('bounds', map)
+    map.setMapTypeId('dark')
 
-		autocomplete.addListener('place_changed', function(event) {
+    map.setTilt(45)
 
-			place = autocomplete.getPlace()
+    var input = document.getElementById('locationTextField')
 
-			if (!place.geometry) {
-				
-				alert('Invalid format')
+    var autocomplete = new google.maps.places.Autocomplete(input)
 
-				callNewModal()
+    autocomplete.bindTo('bounds', map)
 
-				return
-			}
+    autocomplete.addListener('place_changed', function(event) {
 
-			else {
-				map.setCenter(place.geometry.location)
-				map.setZoom(14)
-			}
-		})
+        place = autocomplete.getPlace()
 
-		//MAP CONTROL 			
-			var control = document.getElementById('mapControl')
-			map.controls[google.maps.ControlPosition.LEFT_TOP].push(control)
+        if (!place.geometry) {
 
-		//MAP LEGEND
-			var legend = document.getElementById('legend')
-			map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend)
+            alert('Invalid format')
 
-			$('#legend').collapse('show')
+            callNewModal()
 
-		//Reset Center when on window resize
+            return
+        } else {
+            map.setCenter(place.geometry.location)
+            map.setZoom(14)
+        }
+    })
 
-		window.addEventListener('resize', function(){
+    //MAP CONTROL 			
+    var control = document.getElementById('mapControl')
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(control)
 
-			map.setCenter(place.geometry.location)
+    //MAP LEGEND
+    var legend = document.getElementById('legend')
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend)
 
-			checkFocusWindowVisibility()
-		})
+    $('#legend').collapse('show')
 
-		//Close InfoWindows when the zoom changes
+    //Reset Center when on window resize
 
-		map.addListener('zoom_changed', function(){
+    window.addEventListener('resize', function() {
 
-			clearInfoWindows()
-			clearParkingInfoWindows()
-			clearPlaceInfoWindows()	
-		})
+        map.setCenter(place.geometry.location)
 
-		// var geocoder = new google.maps.Geocoder;
+        checkFocusWindowVisibility()
+    })
 
-  //       document.getElementById('currentLocationButton').addEventListener('click', function() {
-  //         geocodeLatLng(geocoder, map);
-  //       });
+    //Close InfoWindows when the zoom changes
+
+    map.addListener('zoom_changed', function() {
+
+        clearInfoWindows()
+        clearParkingInfoWindows()
+        clearPlaceInfoWindows()
+    })
+
+    // var geocoder = new google.maps.Geocoder;
+
+    //       document.getElementById('currentLocationButton').addEventListener('click', function() {
+    //         geocodeLatLng(geocoder, map);
+    //       });
 
 
-	}//close initMap
+} //close initMap
 
 //SUBMIT CITY NAME ==============================================================================================================================
 
-	var submitLocation = function(event) {
-		
-		event.preventDefault()
+function submitLocation(event) {
 
-		var fbRestaurants = []
-		var fbRestaurantsAll = []
-		var fbEntertainment = []
-		var fbEntertainmentAll = []
-		var fbRecreation = []
-		var fbRecreationAll = []
-		var fbShopping = []
-		var fbShoppingAll = []
+    event.preventDefault()
 
-
-		$('#modalCloseButton').show()
-		$('#searchLocationButton').hide()
-		$('#viewMapButton').show()
-		$('#loadScreen').empty()
-		$('#areaCheckbox').prop('checked', false)
-
-		$('#legendContainer').collapse('show')
+    var fbRestaurants = []
+    var fbRestaurantsAll = []
+    var fbEntertainment = []
+    var fbEntertainmentAll = []
+    var fbRecreation = []
+    var fbRecreationAll = []
+    var fbShopping = []
+    var fbShoppingAll = []
 
 
-		map.setMapTypeId('dark')
+    $('#modalCloseButton').show()
+    $('#searchLocationButton').hide()
+    $('#viewMapButton').show()
+    $('#loadScreen').empty()
+    $('#areaCheckbox').prop('checked', false)
 
-		if(parkingSearchCircle){
+    $('#legendContainer').collapse('show')
 
-			parkingSearchCircle.setMap(null)
-		}
 
-		resetCheckboxes()
+    map.setMapTypeId('dark')
 
-		closeFocusWindow()
+    if (parkingSearchCircle) {
 
-		clearParkingMarkers()
+        parkingSearchCircle.setMap(null)
+    }
 
-		clearParkingInfoWindows()
+    resetCheckboxes()
 
-		clearPlaceInfoWindows()
+    closeFocusWindow()
 
-		checkFocusWindowVisibility()
+    clearParkingMarkers()
 
-		if(centerMarker !== null){
-			
-			hideCenterMarker()
-		}
+    clearParkingInfoWindows()
 
-		var userinput = $('#locationTextField').val()
+    clearPlaceInfoWindows()
 
-		$('#locationTextField').blur()
+    checkFocusWindowVisibility()
 
-//REQUEST TO GOOGLE PLACES ======================================================================================================================
+    if (centerMarker !== null) {
 
-		$.get(`/search?query=${userinput}`, function(googleData, status) {
+        hideCenterMarker()
+    }
 
-			$(document).ajaxComplete(function(event) {
+    var userinput = $('#locationTextField').val()
 
-				// console.log('google place search complete')
-			});
+    $('#locationTextField').blur()
 
-			googleData = JSON.parse(googleData)
+    //REQUEST TO GOOGLE PLACES ======================================================================================================================
 
-			var latitude = googleData.results[0].geometry.location.lat
-			var longitude = googleData.results[0].geometry.location.lng
+    $.get(`/search?query=${userinput}`, function(googleData, status) {
 
-			    citySearchCircle = new google.maps.Circle({
-			      
-			      strokeColor: 'white',
-			      strokeOpacity: 0.3,
-			      strokeWeight: 3,
-			      fillColor: 'white',
-			      fillOpacity: 0.1,
-			      map: map,
-			      center: googleData.results[0].geometry.location,
-			      radius: 3500,
-			    })
+        $(document).ajaxComplete(function(event) {
 
-			    citySearchCircle.setMap(null)
+            // console.log('google place search complete')
+        });
 
-			// console.log(googleData)
+        googleData = JSON.parse(googleData)
 
-//REQUESTS TO FACEBOOK ==========================================================================================================================
-		
-	//RESTAURANTS ===============================================================================================================================
+        var latitude = googleData.results[0].geometry.location.lat
+        var longitude = googleData.results[0].geometry.location.lng
 
-			$.get(`/restaurants?center=${latitude},${longitude}`, function(restaurantsFacebookData, status) {
+        citySearchCircle = new google.maps.Circle({
 
-				$(document).ajaxComplete(function(event) {
+            strokeColor: 'white',
+            strokeOpacity: 0.3,
+            strokeWeight: 3,
+            fillColor: 'white',
+            fillOpacity: 0.1,
+            map: map,
+            center: googleData.results[0].geometry.location,
+            radius: 3500,
+        })
 
-			  		// console.log('facebook restaurant complete')
-				})
+        citySearchCircle.setMap(null)
 
-				restaurantsFacebookData = JSON.parse(restaurantsFacebookData)
+        // console.log(googleData)
 
-				for (var i = 0; i < restaurantsFacebookData.data.length; i++) {
+        //REQUESTS TO FACEBOOK ==========================================================================================================================
 
-					if (restaurantsFacebookData.data[i].is_permanently_closed === false) {
+        //RESTAURANTS ===============================================================================================================================
 
-						fbRestaurantsAll.push(restaurantsFacebookData.data[i])
-						
-						fbRestaurantsAll.sort(function(a,b){
+        $.get(`/restaurants?center=${latitude},${longitude}`, function(restaurantsFacebookData, status) {
 
-							return b.checkins - a.checkins
-						})
-					}
-				}
+            $(document).ajaxComplete(function(event) {
 
-				var fbRestaurantsSliced = fbRestaurantsAll.slice(0,10)
+                // console.log('facebook restaurant complete')
+            })
 
-					// console.log('restaurants ', fbRestaurantsSliced)
+            restaurantsFacebookData = JSON.parse(restaurantsFacebookData)
 
-					$('#loadScreen').append(`<li>Restaurants ... <span>LOADED</span></li>`)
+            for (var i = 0; i < restaurantsFacebookData.data.length; i++) {
 
-						for (var i = 0; i < fbRestaurantsSliced.length; i++) {
+                if (restaurantsFacebookData.data[i].is_permanently_closed === false) {
 
-		
-							fbRestaurants.push({
-								
-								lat: fbRestaurantsSliced[i].location.latitude,
-								lng: fbRestaurantsSliced[i].location.longitude,
-								name: fbRestaurantsSliced[i].name,
-								categories: fbRestaurantsSliced[i].category_list,
-								about: fbRestaurantsSliced[i].about,
-								website: fbRestaurantsSliced[i].website,
-								facebook: fbRestaurantsSliced[i].link,
-								phone: fbRestaurantsSliced[i].phone,
-								hours: fbRestaurantsSliced[i].hours,
-								description: fbRestaurantsSliced[i].description,
-								rating: fbRestaurantsSliced[i].overall_star_rating,
-								checkins: fbRestaurantsSliced[i].checkins,
-								picture: fbRestaurantsSliced[i].picture,
-								parking: fbRestaurantsSliced[i].parking,
-							})
-						}	
-								// console.log(fbRestaurants)
+                    fbRestaurantsAll.push(restaurantsFacebookData.data[i])
 
-						restaurantsMarkers = fbRestaurants.map(function(location, i) {
-							
-							return new google.maps.Marker({
-								position: new google.maps.LatLng(location.lat, location.lng),
-								center: `{lat: ${location.lat}, lng: ${location.lng}}`,
-								visible: true,
-								icon: '/images/marker_orange.png',
-								title: location.name,
-								categories: location.categories,
-								about: location.about,
-								description: location.description,
-								website: location.website,
-								facebook: location.facebook,
-								phone: location.phone,
-								hours: location.hours,
-								picture: location.picture,
-								parking: location.parking,
-							})
-						})
+                    fbRestaurantsAll.sort(function(a, b) {
 
-						restaurantsMarkers.forEach(function(marker){
+                        return b.checkins - a.checkins
+                    })
+                }
+            }
 
-							marker.addListener('click', function(){
+            var fbRestaurantsSliced = fbRestaurantsAll.slice(0, 10)
 
-								placeInfoWindow.open(map)
+            // console.log('restaurants ', fbRestaurantsSliced)
 
-								// console.log(marker)
-							})
-						})
-			
+            $('#loadScreen').append(`<li>Restaurants ... <span>LOADED</span></li>`)
 
-						var restaurantStyle = [
-							
-								{
-									url: '/images/food_icon_circle.png',
-									anchorIcon: [50,50],
-									anchorText: [30,43],
-									textColor: 'black',
-									fontFamily: 'Oswald'															
-								}
-							]
+            for (var i = 0; i < fbRestaurantsSliced.length; i++) {
 
-						restaurantsMarkerCluster = new MarkerClusterer(map, restaurantsMarkers, 
-							
-							{
-								ignoreHidden: true, 
-								gridSize: 300, 
-								maxZoom: 15, 
-								styles: restaurantStyle,
-								averageCenter: true,
-								zoomOnClick: false,
 
-							})
+                fbRestaurants.push({
 
-						google.maps.event.addListener(restaurantsMarkerCluster, 'click', function(cluster) { 
-						 
-								// console.log(cluster)
+                    lat: fbRestaurantsSliced[i].location.latitude,
+                    lng: fbRestaurantsSliced[i].location.longitude,
+                    name: fbRestaurantsSliced[i].name,
+                    categories: fbRestaurantsSliced[i].category_list,
+                    about: fbRestaurantsSliced[i].about,
+                    website: fbRestaurantsSliced[i].website,
+                    facebook: fbRestaurantsSliced[i].link,
+                    phone: fbRestaurantsSliced[i].phone,
+                    hours: fbRestaurantsSliced[i].hours,
+                    description: fbRestaurantsSliced[i].description,
+                    rating: fbRestaurantsSliced[i].overall_star_rating,
+                    checkins: fbRestaurantsSliced[i].checkins,
+                    picture: fbRestaurantsSliced[i].picture,
+                    parking: fbRestaurantsSliced[i].parking,
+                })
+            }
+            // console.log(fbRestaurants)
 
-								restaurantsInfoWindow = new google.maps.InfoWindow();
+            restaurantsMarkers = fbRestaurants.map(function(location, i) {
 
-								clearInfoWindows()
-								
-								var restaurantsClickedMarkers = cluster.getMarkers()
+                return new google.maps.Marker({
+                    position: new google.maps.LatLng(location.lat, location.lng),
+                    center: `{lat: ${location.lat}, lng: ${location.lng}}`,
+                    visible: true,
+                    icon: '/images/marker_orange.png',
+                    title: location.name,
+                    categories: location.categories,
+                    about: location.about,
+                    description: location.description,
+                    website: location.website,
+                    facebook: location.facebook,
+                    phone: location.phone,
+                    hours: location.hours,
+                    picture: location.picture,
+                    parking: location.parking,
+                })
+            })
 
-								var content = `<div class="restaurantsClusterInfoWindowTitle">
+            restaurantsMarkers.forEach(function(marker) {
+
+                marker.addListener('click', function() {
+
+                    placeInfoWindow.open(map)
+
+                    // console.log(marker)
+                })
+            })
+
+
+            var restaurantStyle = [
+
+                {
+                    url: '/images/food_icon_circle.png',
+                    anchorIcon: [50, 50],
+                    anchorText: [30, 43],
+                    textColor: 'black',
+                    fontFamily: 'Oswald'
+                }
+            ]
+
+            restaurantsMarkerCluster = new MarkerClusterer(map, restaurantsMarkers,
+
+                {
+                    ignoreHidden: true,
+                    gridSize: 300,
+                    maxZoom: 15,
+                    styles: restaurantStyle,
+                    averageCenter: true,
+                    zoomOnClick: false,
+
+                })
+
+            google.maps.event.addListener(restaurantsMarkerCluster, 'click', function(cluster) {
+
+                // console.log(cluster)
+
+                restaurantsInfoWindow = new google.maps.InfoWindow();
+
+                clearInfoWindows()
+
+                var restaurantsClickedMarkers = cluster.getMarkers()
+
+                var content = `<div class="restaurantsClusterInfoWindowTitle">
 													<p>Restaurants</p>
 												</div>`
 
-									for (var i = 0; i < cluster.markers_.length; i++) {
+                for (var i = 0; i < cluster.markers_.length; i++) {
 
-											content += 
-												`
+                    content +=
+                        `
 												<p class="clusterInfoListItem" onclick="getRestaurantInfo(this)">${cluster.markers_[i].title}</p>
 											
-												`										
-									}
-								  
-								  var offset = 0.5 / Math.pow(2, map.getZoom())
-								  
-								  restaurantsInfoWindow.setContent(content);
-								  restaurantsInfoWindow.setPosition({
-								    lat: cluster.center_.lat() * (1 + offset),
-								    lng: cluster.center_.lng()
-								  })
+												`
+                }
 
-								  google.maps.event.addListener(restaurantsInfoWindow, 'domready', function() {
+                var offset = 0.5 / Math.pow(2, map.getZoom())
 
-									   var iwOuter = $('.gm-style-iw')
+                restaurantsInfoWindow.setContent(content);
+                restaurantsInfoWindow.setPosition({
+                    lat: cluster.center_.lat() * (1 + offset),
+                    lng: cluster.center_.lng()
+                })
 
-									   var iwBackground = iwOuter.prev()
+                google.maps.event.addListener(restaurantsInfoWindow, 'domready', function() {
 
-									   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+                    var iwOuter = $('.gm-style-iw')
 
-									   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+                    var iwBackground = iwOuter.prev()
 
-								  		var iwCloseBtn = iwOuter.next()
+                    iwBackground.children(':nth-child(2)').css({ 'display': 'none' })
 
-										iwCloseBtn.css({
-										  opacity: '1', // by default the close button has an opacity of 0.7
-										  padding: '.4rem',
-										  textAlign: 'center',
-										  right: '34px', top: '4px', // button repositioning
-										  border: '5px solid #F9850B', // increasing button border and new color
-										  'border-radius': '13px', // circular effect
-										  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
-										  });
-									})
+                    iwBackground.children(':nth-child(4)').css({ 'display': 'none' })
+
+                    var iwCloseBtn = iwOuter.next()
+
+                    iwCloseBtn.css({
+                        opacity: '1', // by default the close button has an opacity of 0.7
+                        padding: '.4rem',
+                        textAlign: 'center',
+                        right: '34px',
+                        top: '4px', // button repositioning
+                        border: '5px solid #F9850B', // increasing button border and new color
+                        'border-radius': '13px', // circular effect
+                        'box-shadow': '0 0 5px black' // 3D effect to highlight the button
+                    });
+                })
 
 
-									restaurantsInfoWindows.push(restaurantsInfoWindow)
+                restaurantsInfoWindows.push(restaurantsInfoWindow)
 
-								  	restaurantsInfoWindow.open(map)		  
-						})
-			})
+                restaurantsInfoWindow.open(map)
+            })
+        })
 
-	//ENTERTAINMENT =============================================================================================================================
+        //ENTERTAINMENT =============================================================================================================================
 
-			$.get(`/entertainment?center=${latitude},${longitude}`, function(entertainmentFacebookData, status) {
+        $.get(`/entertainment?center=${latitude},${longitude}`, function(entertainmentFacebookData, status) {
 
-				$(document).ajaxComplete(function(event) {
+            $(document).ajaxComplete(function(event) {
 
-			  		// console.log('facebook entertainment complete')
-				})
+                // console.log('facebook entertainment complete')
+            })
 
-				entertainmentFacebookData = JSON.parse(entertainmentFacebookData)
+            entertainmentFacebookData = JSON.parse(entertainmentFacebookData)
 
-				for (var i = 0; i < entertainmentFacebookData.data.length; i++) {
+            for (var i = 0; i < entertainmentFacebookData.data.length; i++) {
 
-					if (entertainmentFacebookData.data[i].is_permanently_closed === false){
+                if (entertainmentFacebookData.data[i].is_permanently_closed === false) {
 
-						fbEntertainmentAll.push(entertainmentFacebookData.data[i])
+                    fbEntertainmentAll.push(entertainmentFacebookData.data[i])
 
-						fbEntertainmentAll.sort(function(a,b){
+                    fbEntertainmentAll.sort(function(a, b) {
 
-								return b.checkins - a.checkins
-						})
-					}
-				}
+                        return b.checkins - a.checkins
+                    })
+                }
+            }
 
-					var fbEntertainmentSliced = fbEntertainmentAll.slice(0,10)
+            var fbEntertainmentSliced = fbEntertainmentAll.slice(0, 10)
 
-						// console.log('entertainment ', fbEntertainmentSliced)
+            // console.log('entertainment ', fbEntertainmentSliced)
 
-					var popularEntertainment = fbEntertainmentSliced[0].name
-						
-						$('#loadScreen').append(`<li>Entertainment Venues ... <span>LOADED</span></li>`)
+            var popularEntertainment = fbEntertainmentSliced[0].name
 
-						for (var i = 0; i < fbEntertainmentSliced.length; i++) {
+            $('#loadScreen').append(`<li>Entertainment Venues ... <span>LOADED</span></li>`)
 
-		
-							fbEntertainment.push({
-								lat: fbEntertainmentSliced[i].location.latitude,
-								lng: fbEntertainmentSliced[i].location.longitude,
-								name: fbEntertainmentSliced[i].name,
-								categories: fbEntertainmentSliced[i].category_list,
-								about: fbEntertainmentSliced[i].about,
-								website: fbEntertainmentSliced[i].website,
-								facebook: fbEntertainmentSliced[i].link,
-								phone: fbEntertainmentSliced[i].phone,
-								hours: fbEntertainmentSliced[i].hours,
-								description: fbEntertainmentSliced[i].description,
-								rating: fbEntertainmentSliced[i].overall_star_rating,
-								picture: fbEntertainmentSliced[i].picture,
-								parking: fbEntertainmentSliced[i].parking,
-							})
-						}
-					
-						entertainmentMarkers = fbEntertainment.map(function(location, i) {
-													
-							return new google.maps.Marker({
-								position: new google.maps.LatLng(location.lat, location.lng),
-								center: `{lat: ${location.lat}, lng: ${location.lng}}`,
-								visible: true,
-								icon: '/images/marker_purple.png',
-								title: location.name,
-								categories: location.categories,
-								about: location.about,
-								description: location.description,
-								website: location.website,
-								facebook: location.facebook,
-								phone: location.phone,
-								hours: location.hours,
-								picture: location.picture,
-								parking: location.parking,
-							})	
-						})
+            for (var i = 0; i < fbEntertainmentSliced.length; i++) {
 
-						entertainmentMarkers.forEach(function(marker){
 
-							marker.addListener('click', function(){
+                fbEntertainment.push({
+                    lat: fbEntertainmentSliced[i].location.latitude,
+                    lng: fbEntertainmentSliced[i].location.longitude,
+                    name: fbEntertainmentSliced[i].name,
+                    categories: fbEntertainmentSliced[i].category_list,
+                    about: fbEntertainmentSliced[i].about,
+                    website: fbEntertainmentSliced[i].website,
+                    facebook: fbEntertainmentSliced[i].link,
+                    phone: fbEntertainmentSliced[i].phone,
+                    hours: fbEntertainmentSliced[i].hours,
+                    description: fbEntertainmentSliced[i].description,
+                    rating: fbEntertainmentSliced[i].overall_star_rating,
+                    picture: fbEntertainmentSliced[i].picture,
+                    parking: fbEntertainmentSliced[i].parking,
+                })
+            }
 
-								placeInfoWindow.open(map)
+            entertainmentMarkers = fbEntertainment.map(function(location, i) {
 
-								// console.log(marker)
-							})
-						})
+                return new google.maps.Marker({
+                    position: new google.maps.LatLng(location.lat, location.lng),
+                    center: `{lat: ${location.lat}, lng: ${location.lng}}`,
+                    visible: true,
+                    icon: '/images/marker_purple.png',
+                    title: location.name,
+                    categories: location.categories,
+                    about: location.about,
+                    description: location.description,
+                    website: location.website,
+                    facebook: location.facebook,
+                    phone: location.phone,
+                    hours: location.hours,
+                    picture: location.picture,
+                    parking: location.parking,
+                })
+            })
 
-						var entertainmentStyle = [
-							
-							{
-								url: '/images/entertainment_icon_circle.png',
-								anchorIcon: [50,50],
-								anchorText: [27,47],
-								textColor: 'black',
-								fontFamily: 'Oswald'													
-							}
-						]
+            entertainmentMarkers.forEach(function(marker) {
 
-						entertainmentMarkerCluster = new MarkerClusterer(map, entertainmentMarkers, 
-							
-							{
-								ignoreHidden: true, 
-								gridSize: 300, 
-								maxZoom: 15, 
-								styles: entertainmentStyle,
-								averageCenter: true,
-								zoomOnClick: false,	
-							})
+                marker.addListener('click', function() {
 
-						google.maps.event.addListener(entertainmentMarkerCluster, 'click', function(cluster) { 
-							
-								var entertainmentInfoWindow = new google.maps.InfoWindow()
+                    placeInfoWindow.open(map)
 
-								clearInfoWindows()
-								
-								var entertainmentClickedMarkers = cluster.getMarkers()
+                    // console.log(marker)
+                })
+            })
 
-								var content = `<div class="entertainmentClusterInfoWindowTitle">
+            var entertainmentStyle = [
+
+                {
+                    url: '/images/entertainment_icon_circle.png',
+                    anchorIcon: [50, 50],
+                    anchorText: [27, 47],
+                    textColor: 'black',
+                    fontFamily: 'Oswald'
+                }
+            ]
+
+            entertainmentMarkerCluster = new MarkerClusterer(map, entertainmentMarkers,
+
+                {
+                    ignoreHidden: true,
+                    gridSize: 300,
+                    maxZoom: 15,
+                    styles: entertainmentStyle,
+                    averageCenter: true,
+                    zoomOnClick: false,
+                })
+
+            google.maps.event.addListener(entertainmentMarkerCluster, 'click', function(cluster) {
+
+                var entertainmentInfoWindow = new google.maps.InfoWindow()
+
+                clearInfoWindows()
+
+                var entertainmentClickedMarkers = cluster.getMarkers()
+
+                var content = `<div class="entertainmentClusterInfoWindowTitle">
 													<p>Entertainment Venues</p>
 												</div>
 												`
 
-									for (var i = 0; i < cluster.markers_.length; i++) {
+                for (var i = 0; i < cluster.markers_.length; i++) {
 
-											content += 
-												`
+                    content +=
+                        `
 												<p class="clusterInfoListItem" onclick="getEntertainmentInfo(this)">${cluster.markers_[i].title}</p>
-												`	
-									}
-								  
-								  var offset = 0.5 / Math.pow(2, map.getZoom())
-								  
-								  entertainmentInfoWindow.setContent(content);
-								  entertainmentInfoWindow.setPosition({
-								    lat: cluster.center_.lat() * (1 + offset),
-								    lng: cluster.center_.lng()
-								  })
+												`
+                }
 
-								   google.maps.event.addListener(entertainmentInfoWindow, 'domready', function() {
+                var offset = 0.5 / Math.pow(2, map.getZoom())
 
-								   	var iwOuter = $('.gm-style-iw')
+                entertainmentInfoWindow.setContent(content);
+                entertainmentInfoWindow.setPosition({
+                    lat: cluster.center_.lat() * (1 + offset),
+                    lng: cluster.center_.lng()
+                })
 
-								   	var iwBackground = iwOuter.prev()
+                google.maps.event.addListener(entertainmentInfoWindow, 'domready', function() {
 
-								   	iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+                    var iwOuter = $('.gm-style-iw')
 
-								   	iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+                    var iwBackground = iwOuter.prev()
 
-							  		var iwCloseBtn = iwOuter.next()
-									
-									iwCloseBtn.css({
-									  opacity: '1', // by default the close button has an opacity of 0.7
-									  padding: '.4rem',
-									  textAlign: 'center',
-									  right: '34px', top: '4px', // button repositioning
-									  border: '5px solid #5A4BC6', // increasing button border and new color
-									  'border-radius': '13px', // circular effect
-									  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
-									  });
-									})
+                    iwBackground.children(':nth-child(2)').css({ 'display': 'none' })
 
-									entertainmentInfoWindows.push(entertainmentInfoWindow)
+                    iwBackground.children(':nth-child(4)').css({ 'display': 'none' })
 
-								  	entertainmentInfoWindow.open(map)
+                    var iwCloseBtn = iwOuter.next()
 
-							})
-			})
+                    iwCloseBtn.css({
+                        opacity: '1', // by default the close button has an opacity of 0.7
+                        padding: '.4rem',
+                        textAlign: 'center',
+                        right: '34px',
+                        top: '4px', // button repositioning
+                        border: '5px solid #5A4BC6', // increasing button border and new color
+                        'border-radius': '13px', // circular effect
+                        'box-shadow': '0 0 5px black' // 3D effect to highlight the button
+                    });
+                })
 
-	//RECREATION ================================================================================================================================
+                entertainmentInfoWindows.push(entertainmentInfoWindow)
 
-			$.get(`/recreation?center=${latitude},${longitude}`, function(recreationFacebookData, status) {
+                entertainmentInfoWindow.open(map)
 
-				$(document).ajaxComplete(function(event) {
+            })
+        })
 
-			  		// console.log('facebook recreation complete')
-				})
+        //RECREATION ================================================================================================================================
 
-				recreationFacebookData = JSON.parse(recreationFacebookData)
+        $.get(`/recreation?center=${latitude},${longitude}`, function(recreationFacebookData, status) {
 
-				for (var i = 0; i < recreationFacebookData.data.length; i++) {
-		
-					if (recreationFacebookData.data[i].is_permanently_closed === false) {
+            $(document).ajaxComplete(function(event) {
 
-						fbRecreationAll.push(recreationFacebookData.data[i])
+                // console.log('facebook recreation complete')
+            })
 
-						fbRecreationAll.sort(function(a,b){
+            recreationFacebookData = JSON.parse(recreationFacebookData)
 
-							return b.checkins - a.checkins
-						})
-					}
-				}
+            for (var i = 0; i < recreationFacebookData.data.length; i++) {
 
-				var fbRecreationSliced = fbRecreationAll.slice(0,10)
+                if (recreationFacebookData.data[i].is_permanently_closed === false) {
 
-					// console.log('recreation ', fbRecreationSliced)
+                    fbRecreationAll.push(recreationFacebookData.data[i])
 
-				var popularRecreation = fbRecreationSliced[0].name
-					
-					$('#loadScreen').append(`<li>Recreational Facilities ... <span>LOADED</span></li>`)
+                    fbRecreationAll.sort(function(a, b) {
 
-						for (var i = 0; i < fbRecreationSliced.length; i++) {
+                        return b.checkins - a.checkins
+                    })
+                }
+            }
 
-		
-							fbRecreation.push({
-								
-								lat: fbRecreationSliced[i].location.latitude,
-								lng: fbRecreationSliced[i].location.longitude,
-								name: fbRecreationSliced[i].name,
-								categories: fbRecreationSliced[i].category_list,
-								about: fbRecreationSliced[i].about,
-								website: fbRecreationSliced[i].website,
-								facebook: fbRecreationSliced[i].link,
-								phone: fbRecreationSliced[i].phone,
-								hours: fbRecreationSliced[i].hours,
-								description: fbRecreationSliced[i].description,
-								rating: fbRecreationSliced[i].overall_star_rating,
-								picture: fbRecreationSliced[i].picture,
-								parking: fbRecreationSliced[i].parking,
-							})
-						}
+            var fbRecreationSliced = fbRecreationAll.slice(0, 10)
 
-						recreationMarkers = fbRecreation.map(function(location, i) {
-							
-							return new google.maps.Marker({
-								position: new google.maps.LatLng(location.lat, location.lng),
-								center: `{lat: ${location.lat}, lng: ${location.lng}}`,
-								visible: true,
-								icon: '/images/marker_red.png',
-								title: location.name,
-								categories: location.categories,
-								about: location.about,
-								description: location.description,
-								website: location.website,
-								facebook: location.facebook,
-								phone: location.phone,
-								hours: location.hours,
-								picture: location.picture,
-								parking: location.parking,
-							})
-						})
+            // console.log('recreation ', fbRecreationSliced)
 
-						recreationMarkers.forEach(function(marker){
+            var popularRecreation = fbRecreationSliced[0].name
 
-							marker.addListener('click', function(){
+            $('#loadScreen').append(`<li>Recreational Facilities ... <span>LOADED</span></li>`)
 
-								placeInfoWindow.open(map)
+            for (var i = 0; i < fbRecreationSliced.length; i++) {
 
-								// console.log(marker)
-							})
-						})
 
-						var recreationStyle = [
-							
-							{
-								url: '/images/fitness_icon_circle.png',
-								anchorIcon: [50,50],
-								anchorText: [35,46],
-								textColor: 'black',
-								fontFamily: 'Oswald'								
-							}
-						]
+                fbRecreation.push({
 
-						recreationMarkerCluster = new MarkerClusterer(map, recreationMarkers, 
-							
-							{
-								ignoreHidden: true, 
-								gridSize: 300, 
-								maxZoom: 15, 
-								styles: recreationStyle,
-								averageCenter: true,
-								zoomOnClick: false,						
-							})	
+                    lat: fbRecreationSliced[i].location.latitude,
+                    lng: fbRecreationSliced[i].location.longitude,
+                    name: fbRecreationSliced[i].name,
+                    categories: fbRecreationSliced[i].category_list,
+                    about: fbRecreationSliced[i].about,
+                    website: fbRecreationSliced[i].website,
+                    facebook: fbRecreationSliced[i].link,
+                    phone: fbRecreationSliced[i].phone,
+                    hours: fbRecreationSliced[i].hours,
+                    description: fbRecreationSliced[i].description,
+                    rating: fbRecreationSliced[i].overall_star_rating,
+                    picture: fbRecreationSliced[i].picture,
+                    parking: fbRecreationSliced[i].parking,
+                })
+            }
 
-						google.maps.event.addListener(recreationMarkerCluster, 'click', function(cluster) { 
+            recreationMarkers = fbRecreation.map(function(location, i) {
 
-							var recreationInfoWindow = new google.maps.InfoWindow()
+                return new google.maps.Marker({
+                    position: new google.maps.LatLng(location.lat, location.lng),
+                    center: `{lat: ${location.lat}, lng: ${location.lng}}`,
+                    visible: true,
+                    icon: '/images/marker_red.png',
+                    title: location.name,
+                    categories: location.categories,
+                    about: location.about,
+                    description: location.description,
+                    website: location.website,
+                    facebook: location.facebook,
+                    phone: location.phone,
+                    hours: location.hours,
+                    picture: location.picture,
+                    parking: location.parking,
+                })
+            })
 
-							clearInfoWindows()
-							
-							var recreationClickedMarkers = cluster.getMarkers()
+            recreationMarkers.forEach(function(marker) {
 
-							var content = `<div class="recreationClusterInfoWindowTitle">
+                marker.addListener('click', function() {
+
+                    placeInfoWindow.open(map)
+
+                    // console.log(marker)
+                })
+            })
+
+            var recreationStyle = [
+
+                {
+                    url: '/images/fitness_icon_circle.png',
+                    anchorIcon: [50, 50],
+                    anchorText: [35, 46],
+                    textColor: 'black',
+                    fontFamily: 'Oswald'
+                }
+            ]
+
+            recreationMarkerCluster = new MarkerClusterer(map, recreationMarkers,
+
+                {
+                    ignoreHidden: true,
+                    gridSize: 300,
+                    maxZoom: 15,
+                    styles: recreationStyle,
+                    averageCenter: true,
+                    zoomOnClick: false,
+                })
+
+            google.maps.event.addListener(recreationMarkerCluster, 'click', function(cluster) {
+
+                var recreationInfoWindow = new google.maps.InfoWindow()
+
+                clearInfoWindows()
+
+                var recreationClickedMarkers = cluster.getMarkers()
+
+                var content = `<div class="recreationClusterInfoWindowTitle">
 												<p>Recreational Facilities</p>
 											</div>`
 
-								for (var i = 0; i < cluster.markers_.length; i++) {
+                for (var i = 0; i < cluster.markers_.length; i++) {
 
-										content += 
-											`
+                    content +=
+                        `
 											<p class="clusterInfoListItem" onclick="getRecreationInfo(this)">${cluster.markers_[i].title}</p>
-											`	
-								}
-							  
-							  var offset = 0.5 / Math.pow(2, map.getZoom())
-							  
-							  recreationInfoWindow.setContent(content);
-							  recreationInfoWindow.setPosition({
-							    lat: cluster.center_.lat() * (1 + offset),
-							    lng: cluster.center_.lng()
-							  
-							  })
+											`
+                }
 
-							  google.maps.event.addListener(recreationInfoWindow, 'domready', function() {
+                var offset = 0.5 / Math.pow(2, map.getZoom())
 
-								   var iwOuter = $('.gm-style-iw')
+                recreationInfoWindow.setContent(content);
+                recreationInfoWindow.setPosition({
+                    lat: cluster.center_.lat() * (1 + offset),
+                    lng: cluster.center_.lng()
 
-								   var iwCloseBtn = iwOuter.next()
+                })
 
-									iwCloseBtn.css({
-									  opacity: '1', // by default the close button has an opacity of 0.7
-									  padding: '.4rem',
-									  textAlign: 'center',
-									  right: '34px', top: '4px', // button repositioning
-									  border: '5px solid #E3090E', // increasing button border and new color
-									  'border-radius': '13px', // circular effect
-									  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
-									  });
+                google.maps.event.addListener(recreationInfoWindow, 'domready', function() {
 
-								   var iwBackground = iwOuter.prev()
+                    var iwOuter = $('.gm-style-iw')
 
-								   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+                    var iwCloseBtn = iwOuter.next()
 
-								   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+                    iwCloseBtn.css({
+                        opacity: '1', // by default the close button has an opacity of 0.7
+                        padding: '.4rem',
+                        textAlign: 'center',
+                        right: '34px',
+                        top: '4px', // button repositioning
+                        border: '5px solid #E3090E', // increasing button border and new color
+                        'border-radius': '13px', // circular effect
+                        'box-shadow': '0 0 5px black' // 3D effect to highlight the button
+                    });
 
-								})
+                    var iwBackground = iwOuter.prev()
 
-								recreationInfoWindows.push(recreationInfoWindow)
+                    iwBackground.children(':nth-child(2)').css({ 'display': 'none' })
 
-							  	recreationInfoWindow.open(map)
-						})
-			})
+                    iwBackground.children(':nth-child(4)').css({ 'display': 'none' })
 
-	//SHOPPING ==================================================================================================================================
+                })
 
-			$.get(`/shopping?center=${latitude},${longitude}`, function(shoppingFacebookData, status) {
+                recreationInfoWindows.push(recreationInfoWindow)
 
-				$(document).ajaxComplete(function(event) {
+                recreationInfoWindow.open(map)
+            })
+        })
 
-			  		// console.log('facebook shopping complete')
-				})
+        //SHOPPING ==================================================================================================================================
 
-				shoppingFacebookData = JSON.parse(shoppingFacebookData)
+        $.get(`/shopping?center=${latitude},${longitude}`, function(shoppingFacebookData, status) {
 
-				for (var i = 0; i < shoppingFacebookData.data.length; i++) {
+            $(document).ajaxComplete(function(event) {
 
-					if (shoppingFacebookData.data[i].is_permanently_closed === false) {
+                // console.log('facebook shopping complete')
+            })
 
-						fbShoppingAll.push(shoppingFacebookData.data[i])
+            shoppingFacebookData = JSON.parse(shoppingFacebookData)
 
-						fbShoppingAll.sort(function(a,b){
+            for (var i = 0; i < shoppingFacebookData.data.length; i++) {
 
-							return b.checkins - a.checkins
-						})
-					}
-				}
+                if (shoppingFacebookData.data[i].is_permanently_closed === false) {
 
-				var fbShoppingSliced = fbShoppingAll.slice(0,10)
+                    fbShoppingAll.push(shoppingFacebookData.data[i])
 
-					// console.log('shopping ', fbShoppingSliced)
+                    fbShoppingAll.sort(function(a, b) {
 
-				var popularShopping = fbShoppingSliced[0].name
-					
-					$('#loadScreen').append(`<li>Shopping Centers ... <span>LOADED</span></li>`)
+                        return b.checkins - a.checkins
+                    })
+                }
+            }
 
-					for (var i = 0; i < fbShoppingSliced.length; i++) {
-	
-						fbShopping.push({
-							lat: fbShoppingSliced[i].location.latitude,
-							lng: fbShoppingSliced[i].location.longitude,
-							name: fbShoppingSliced[i].name,
-							categories: fbShoppingSliced[i].category_list,
-							about: fbShoppingSliced[i].about,
-							website: fbShoppingSliced[i].website,
-							facebook: fbShoppingSliced[i].link,
-							phone: fbShoppingSliced[i].phone,
-							hours: fbShoppingSliced[i].hours,
-							description: fbShoppingSliced[i].description,
-							rating: fbShoppingSliced[i].overall_star_rating,
-							picture: fbShoppingSliced[i].picture,
-							parking: fbShoppingSliced[i].parking,
-						})
-					}
+            var fbShoppingSliced = fbShoppingAll.slice(0, 10)
 
-						shoppingMarkers = fbShopping.map(function(location, i) {
-							
-							return new google.maps.Marker({
-								position: new google.maps.LatLng(location.lat, location.lng),
-								center: `{lat: ${location.lat}, lng: ${location.lng}}`,
-								visible: true,
-								icon: '/images/marker_green.png',
-								title: location.name,
-								categories: location.categories,
-								about: location.about,
-								description: location.description,
-								website: location.website,
-								facebook: location.facebook,
-								phone: location.phone,
-								hours: location.hours,
-								picture: location.picture,
-								parking: location.parking,
-							})	
-						})
+            // console.log('shopping ', fbShoppingSliced)
 
-						shoppingMarkers.forEach(function(marker){
+            var popularShopping = fbShoppingSliced[0].name
 
-							marker.addListener('click', function(){
+            $('#loadScreen').append(`<li>Shopping Centers ... <span>LOADED</span></li>`)
 
-								placeInfoWindow.open(map)
+            for (var i = 0; i < fbShoppingSliced.length; i++) {
 
-								// console.log(marker)
-							})
-						})
+                fbShopping.push({
+                    lat: fbShoppingSliced[i].location.latitude,
+                    lng: fbShoppingSliced[i].location.longitude,
+                    name: fbShoppingSliced[i].name,
+                    categories: fbShoppingSliced[i].category_list,
+                    about: fbShoppingSliced[i].about,
+                    website: fbShoppingSliced[i].website,
+                    facebook: fbShoppingSliced[i].link,
+                    phone: fbShoppingSliced[i].phone,
+                    hours: fbShoppingSliced[i].hours,
+                    description: fbShoppingSliced[i].description,
+                    rating: fbShoppingSliced[i].overall_star_rating,
+                    picture: fbShoppingSliced[i].picture,
+                    parking: fbShoppingSliced[i].parking,
+                })
+            }
 
-						var shoppingStyle = [
-							
-							{
-								url: '/images/shopping_icon_circle.png',
-								anchorIcon: [50,50],
-								anchorText: [30,48],
-								textColor: 'black',
-								fontFamily: 'Oswald',														
-							}
-						]
+            shoppingMarkers = fbShopping.map(function(location, i) {
 
-						shoppingMarkerCluster = new MarkerClusterer(map, shoppingMarkers, 
-							
-							{
-								ignoreHidden: true, 
-								gridSize: 300, 
-								maxZoom: 15, 
-								styles: shoppingStyle,
-								averageCenter: true,
-								zoomOnClick: false,
-							})
+                return new google.maps.Marker({
+                    position: new google.maps.LatLng(location.lat, location.lng),
+                    center: `{lat: ${location.lat}, lng: ${location.lng}}`,
+                    visible: true,
+                    icon: '/images/marker_green.png',
+                    title: location.name,
+                    categories: location.categories,
+                    about: location.about,
+                    description: location.description,
+                    website: location.website,
+                    facebook: location.facebook,
+                    phone: location.phone,
+                    hours: location.hours,
+                    picture: location.picture,
+                    parking: location.parking,
+                })
+            })
 
-						google.maps.event.addListener(shoppingMarkerCluster, 'click', function(cluster) { 
+            shoppingMarkers.forEach(function(marker) {
 
-								var shoppingInfoWindow = new google.maps.InfoWindow()
+                marker.addListener('click', function() {
 
-								clearInfoWindows()
-								
-								var shoppingClickedMarkers = cluster.getMarkers()
+                    placeInfoWindow.open(map)
 
-								var content = `<div class="shoppingClusterInfoWindowTitle">
+                    // console.log(marker)
+                })
+            })
+
+            var shoppingStyle = [
+
+                {
+                    url: '/images/shopping_icon_circle.png',
+                    anchorIcon: [50, 50],
+                    anchorText: [30, 48],
+                    textColor: 'black',
+                    fontFamily: 'Oswald',
+                }
+            ]
+
+            shoppingMarkerCluster = new MarkerClusterer(map, shoppingMarkers,
+
+                {
+                    ignoreHidden: true,
+                    gridSize: 300,
+                    maxZoom: 15,
+                    styles: shoppingStyle,
+                    averageCenter: true,
+                    zoomOnClick: false,
+                })
+
+            google.maps.event.addListener(shoppingMarkerCluster, 'click', function(cluster) {
+
+                var shoppingInfoWindow = new google.maps.InfoWindow()
+
+                clearInfoWindows()
+
+                var shoppingClickedMarkers = cluster.getMarkers()
+
+                var content = `<div class="shoppingClusterInfoWindowTitle">
 													<p>Shopping Centers</p>
 												</div>`
 
-									for (var i = 0; i < cluster.markers_.length; i++) {
+                for (var i = 0; i < cluster.markers_.length; i++) {
 
-											content += 
-												`
+                    content +=
+                        `
 												<p class="clusterInfoListItem" onclick="getShoppingInfo(this)">${cluster.markers_[i].title}</p>
-												`	
-									}
-								  
-								  var offset = 0.5 / Math.pow(2, map.getZoom())
-								  
-								  shoppingInfoWindow.setContent(content);
-								  shoppingInfoWindow.setPosition({
-								    lat: cluster.center_.lat() * (1 + offset),
-								    lng: cluster.center_.lng()
-								  
-								  })
+												`
+                }
 
-								  google.maps.event.addListener(shoppingInfoWindow, 'domready', function() {
+                var offset = 0.5 / Math.pow(2, map.getZoom())
 
-									   var iwOuter = $('.gm-style-iw')
+                shoppingInfoWindow.setContent(content);
+                shoppingInfoWindow.setPosition({
+                    lat: cluster.center_.lat() * (1 + offset),
+                    lng: cluster.center_.lng()
 
-									   var iwCloseBtn = iwOuter.next()
+                })
 
-										iwCloseBtn.css({
-										  opacity: '1', // by default the close button has an opacity of 0.7
-										  padding: '.4rem',
-										  textAlign: 'center',
-										  right: '34px', top: '4px', // button repositioning
-										  border: '5px solid #107208', // increasing button border and new color
-										  'border-radius': '13px', // circular effect
-										  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
-										  });
+                google.maps.event.addListener(shoppingInfoWindow, 'domready', function() {
 
-									   var iwBackground = iwOuter.prev()
+                    var iwOuter = $('.gm-style-iw')
 
-									   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+                    var iwCloseBtn = iwOuter.next()
 
-									   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+                    iwCloseBtn.css({
+                        opacity: '1', // by default the close button has an opacity of 0.7
+                        padding: '.4rem',
+                        textAlign: 'center',
+                        right: '34px',
+                        top: '4px', // button repositioning
+                        border: '5px solid #107208', // increasing button border and new color
+                        'border-radius': '13px', // circular effect
+                        'box-shadow': '0 0 5px black' // 3D effect to highlight the button
+                    });
 
-									})
+                    var iwBackground = iwOuter.prev()
 
-									shoppingInfoWindows.push(shoppingInfoWindow)
+                    iwBackground.children(':nth-child(2)').css({ 'display': 'none' })
 
-								  	shoppingInfoWindow.open(map)
-							})
-			})
-					
-		}) //google request close					
+                    iwBackground.children(':nth-child(4)').css({ 'display': 'none' })
 
-	} //submit close
+                })
+
+                shoppingInfoWindows.push(shoppingInfoWindow)
+
+                shoppingInfoWindow.open(map)
+            })
+        })
+
+    }) //google request close					
+
+} //submit close
 
 //CLICK EVENTS ==================================================================================================================================
 
 //NEW SEARCH 
 
-	$('#newSearchButton').on('click', function(){
+$('#newSearchButton').on('click', function() {
 
-		callNewModal()
-		$('#viewMapButton').hide()
-		$('#searchLocationButton').show()
-	})
+    callNewModal()
+    $('#viewMapButton').hide()
+    $('#searchLocationButton').show()
+})
 
 //RESET ZOOM
 
-	$('#resetZoomButton').on('click', function(){
+$('#resetZoomButton').on('click', function() {
 
-		resetZoom()
-	})
+    resetZoom()
+})
 
 //TOGGLE LEGEND
 
-	$('#hideButton').on('click', function(){
+$('#hideButton').on('click', function() {
 
-		toggleLegend()
+    toggleLegend()
 
-		if($(this).text() === 'hide'){
+    if ($(this).text() === 'hide') {
 
-			$(this).text('show') 
-		}
-		else{
+        $(this).text('show')
+    } else {
 
-			$(this).text('hide')
-		}
-	})
+        $(this).text('hide')
+    }
+})
 
 //TOGGLE FOCUS WINDOW HOURS
 
-	$('#focusWindowHoursTitle').on('click', function(){
+$('#focusWindowHoursTitle').on('click', function() {
 
-		$('#focusWindowHoursList').collapse('toggle')
-	})
+    $('#focusWindowHoursList').collapse('toggle')
+})
 
 //TOGGLE FOCUS WINDOW DESCRIPTION
 
-	$('#focusWindowDescriptionTitle').on('click', function(){
+$('#focusWindowDescriptionTitle').on('click', function() {
 
-		$('#focusWindowDescription').collapse('toggle')
-	})
+    $('#focusWindowDescription').collapse('toggle')
+})
 
 //TOGGLE SHOW/HIDE CLUSTERS ====================================================================================================================
-	
-	var toggleRestaurants = function(){
 
-		
-		if ($('#foodCheckbox').is(':checked')){
-
-			for (var i in restaurantsMarkers) {
-			    
-			    restaurantsMarkers[i].setVisible(true)
-			}
-
-			$('#resultsRestaurantsList').toggle('show')
-		}
-
-		else {
-
-			for (var i in restaurantsMarkers) {
-			    
-			    restaurantsMarkers[i].setVisible(false)
-			}
-
-			$('#resultsRestaurantsList').toggle('hide')
-
-				clearInfoWindows()
-		}
-				repaintAllClusters()
-	}
-
-	var toggleEntertainment = function(){
-
-		
-		if ($('#artsCheckbox').is(':checked')){
-
-			for (var i in entertainmentMarkers) {
-			    
-			    entertainmentMarkers[i].setVisible(true);
-			}
-
-			$('#resultsEntertainmentList').toggle('show')
-
-		}
-		else {
-
-			for (var i in entertainmentMarkers) {
-			    
-			    entertainmentMarkers[i].setVisible(false);
-			}
-
-			$('#resultsEntertainmentList').toggle('hide')
-
-				clearInfoWindows()
-		}
-				repaintAllClusters()
-	}
-
-	var toggleRecreation = function(){
-
-		
-		if ($('#fitnessCheckbox').is(':checked')){
-
-			for (var i in recreationMarkers) {
-			    
-			    recreationMarkers[i].setVisible(true);
-			}
-
-			$('#resultsRecreationList').toggle('show')
+function toggleRestaurants() {
 
 
-		}
-		else {
+    if ($('#foodCheckbox').is(':checked')) {
 
-			for (var i in recreationMarkers) {
-			    
-			    recreationMarkers[i].setVisible(false);
-			}
+        for (var i in restaurantsMarkers) {
 
-			$('#resultsRecreationList').toggle('hide')
+            restaurantsMarkers[i].setVisible(true)
+        }
 
-				clearInfoWindows()
-		}
-				repaintAllClusters()
-	}
+        $('#resultsRestaurantsList').toggle('show')
+    } else {
 
-	var toggleShopping = function(){
+        for (var i in restaurantsMarkers) {
 
-		
-		if ($('#shoppingCheckbox').is(':checked')){
+            restaurantsMarkers[i].setVisible(false)
+        }
 
-			for (var i in shoppingMarkers) {
-			    
-			    shoppingMarkers[i].setVisible(true);
-			}
+        $('#resultsRestaurantsList').toggle('hide')
 
-			$('#resultsShoppingList').toggle('show')
+        clearInfoWindows()
+    }
+    repaintAllClusters()
+}
+
+function toggleEntertainment() {
 
 
-		}
-		else {
+    if ($('#artsCheckbox').is(':checked')) {
 
-			for (var i in shoppingMarkers) {
-			    
-			    shoppingMarkers[i].setVisible(false);
-			}
+        for (var i in entertainmentMarkers) {
 
-			$('#resultsShoppingList').toggle('hide')
+            entertainmentMarkers[i].setVisible(true);
+        }
 
-				clearInfoWindows()
-		}
-				repaintAllClusters()
-	}
+        $('#resultsEntertainmentList').toggle('show')
 
-	var toggleShowSearchArea = function(){
+    } else {
 
-		if(citySearchCircle.getMap() === null) {
+        for (var i in entertainmentMarkers) {
 
-			citySearchCircle.setMap(map)
-		}
+            entertainmentMarkers[i].setVisible(false);
+        }
 
-		else{
+        $('#resultsEntertainmentList').toggle('hide')
 
-			citySearchCircle.setMap(null)
-		}
-	}
+        clearInfoWindows()
+    }
+    repaintAllClusters()
+}
+
+function toggleRecreation() {
+
+
+    if ($('#fitnessCheckbox').is(':checked')) {
+
+        for (var i in recreationMarkers) {
+
+            recreationMarkers[i].setVisible(true);
+        }
+
+        $('#resultsRecreationList').toggle('show')
+
+
+    } else {
+
+        for (var i in recreationMarkers) {
+
+            recreationMarkers[i].setVisible(false);
+        }
+
+        $('#resultsRecreationList').toggle('hide')
+
+        clearInfoWindows()
+    }
+    repaintAllClusters()
+}
+
+function toggleShopping() {
+
+
+    if ($('#shoppingCheckbox').is(':checked')) {
+
+        for (var i in shoppingMarkers) {
+
+            shoppingMarkers[i].setVisible(true);
+        }
+
+        $('#resultsShoppingList').toggle('show')
+
+
+    } else {
+
+        for (var i in shoppingMarkers) {
+
+            shoppingMarkers[i].setVisible(false);
+        }
+
+        $('#resultsShoppingList').toggle('hide')
+
+        clearInfoWindows()
+    }
+    repaintAllClusters()
+}
+
+function toggleShowSearchArea() {
+
+    if (citySearchCircle.getMap() === null) {
+
+        citySearchCircle.setMap(map)
+    } else {
+
+        citySearchCircle.setMap(null)
+    }
+}
 
 
 //GET PLACE INFO ================================================================================================================================
 
-	var getRestaurantInfo = function(place){
+function getRestaurantInfo(place) {
 
-		clearFocusWindow()
+    clearFocusWindow()
 
-		openFocusWindow()
-
-		$('#focusWindowHoursList').collapse('show')
-
-		$('#focusWindowDescription').collapse('show')
-
-		insideText = place.textContent
-
-		for(var i = 0; i < restaurantsMarkers.length; i++){
-
-
-			if(restaurantsMarkers[i].title === insideText){
- 
-				placeMarkerLocation = restaurantsMarkers[i].center
-
-				placeMarkerInfo = restaurantsMarkers[i]
-
-				placeMarkerParking = restaurantsMarkers[i].parking
-
-				// console.log(placeMarkerParking)
-
-				$('#focusWindowPhoto').attr('src', restaurantsMarkers[i].picture.data.url)
-				$('#focusWindowName').text(restaurantsMarkers[i].title)
-				$('#focusWindowWebsite').attr('href', restaurantsMarkers[i].website)
-				$('#focusWindowFacebook').attr('href', restaurantsMarkers[i].facebook)
-				$('#focusWindowPhone').text(restaurantsMarkers[i].phone)
-
-			//Categories
+    openFocusWindow()
 
-				if(restaurantsMarkers[i].categories){
+    $('#focusWindowHoursList').collapse('show')
 
-					for(var j = 0; j < 1; j++){
+    $('#focusWindowDescription').collapse('show')
 
-						$('#focusWindowCategories').text(`${restaurantsMarkers[i].categories[j].name}`)
-					}
-				}
-					
-			//Hours
-				if(restaurantsMarkers[i].hours) {
-					
-					if(restaurantsMarkers[i].hours.mon_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Monday ${restaurantsMarkers[i].hours.mon_1_open} - ${restaurantsMarkers[i].hours.mon_1_close}</li>`)
-							
-					}
-					else {
+    insideText = place.textContent
 
-						$('#focusWindowHoursList').append(`<li>Monday CLOSED</li>`)
-					}			
-					
-					if(restaurantsMarkers[i].hours.tue_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Tuesday ${restaurantsMarkers[i].hours.tue_1_open} - ${restaurantsMarkers[i].hours.tue_1_close}</li>`)
-							
-					}
-					else {
+    for (var i = 0; i < restaurantsMarkers.length; i++) {
 
-						$('#focusWindowHoursList').append(`<li>Tuesday CLOSED</li>`)
-					}			
 
-					if(restaurantsMarkers[i].hours.wed_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Wednesday ${restaurantsMarkers[i].hours.wed_1_open} - ${restaurantsMarkers[i].hours.wed_1_close}</li>`)
-							
-					}
-					else {
+        if (restaurantsMarkers[i].title === insideText) {
 
-						$('#focusWindowHoursList').append(`<li>Wednesday CLOSED</li>`)
-					}
+            placeMarkerLocation = restaurantsMarkers[i].center
 
-					if(restaurantsMarkers[i].hours.thu_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Thursday ${restaurantsMarkers[i].hours.thu_1_open} - ${restaurantsMarkers[i].hours.thu_1_close}</li>`)
-							
-					}
-					else {
+            placeMarkerInfo = restaurantsMarkers[i]
 
-						$('#focusWindowHoursList').append(`<li>Thursday CLOSED</li>`)
-					}
+            placeMarkerParking = restaurantsMarkers[i].parking
 
-					if(restaurantsMarkers[i].hours.fri_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Friday ${restaurantsMarkers[i].hours.fri_1_open} - ${restaurantsMarkers[i].hours.fri_1_close}</li>`)
-							
-					}
-					else {
+            // console.log(placeMarkerParking)
 
-						$('#focusWindowHoursList').append(`<li>Friday CLOSED</li>`)
-					}
+            $('#focusWindowPhoto').attr('src', restaurantsMarkers[i].picture.data.url)
+            $('#focusWindowName').text(restaurantsMarkers[i].title)
+            $('#focusWindowWebsite').attr('href', restaurantsMarkers[i].website)
+            $('#focusWindowFacebook').attr('href', restaurantsMarkers[i].facebook)
+            $('#focusWindowPhone').text(restaurantsMarkers[i].phone)
 
-					if(restaurantsMarkers[i].hours.sat_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Saturday ${restaurantsMarkers[i].hours.sat_1_open} - ${restaurantsMarkers[i].hours.sat_1_close}</li>`)
-							
-					}
-					else {
+            //Categories
 
-						$('#focusWindowHoursList').append(`<li>Saturday CLOSED</li>`)
-					}
-					
-					if(restaurantsMarkers[i].hours.sun_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Sunday ${restaurantsMarkers[i].hours.sun_1_open} - ${restaurantsMarkers[i].hours.sun_1_close}</li>`)
-							
-					}
-					else {
+            if (restaurantsMarkers[i].categories) {
 
-						$('#focusWindowHoursList').append(`<li>Sunday CLOSED</li>`)
-					}
-				}
-				else {
+                for (var j = 0; j < 1; j++) {
 
-					$('#focusWindowHoursList').text('N/A')
-					
-					// console.log('no hours info')
-				}
+                    $('#focusWindowCategories').text(`${restaurantsMarkers[i].categories[j].name}`)
+                }
+            }
 
-			//Description
+            //Hours
+            if (restaurantsMarkers[i].hours) {
 
-				if (restaurantsMarkers[i].about !== undefined){
+                if (restaurantsMarkers[i].hours.mon_1_open !== undefined) {
 
-					$('#focusWindowDescription').text(restaurantsMarkers[i].about)
-				}
-				else {
+                    $('#focusWindowHoursList').append(`<li>Monday ${restaurantsMarkers[i].hours.mon_1_open} - ${restaurantsMarkers[i].hours.mon_1_close}</li>`)
 
-					$('#focusWindowDescription').text(restaurantsMarkers[i].description)
-				}
+                } else {
 
-			//Show on Map Button
+                    $('#focusWindowHoursList').append(`<li>Monday CLOSED</li>`)
+                }
 
-				$('#showOnMapButton').append(`<img src="/images/show_on_map_button.png" onclick="showLocationOnMap(${placeMarkerLocation})">`)
+                if (restaurantsMarkers[i].hours.tue_1_open !== undefined) {
 
-			}
-		}
-	}
+                    $('#focusWindowHoursList').append(`<li>Tuesday ${restaurantsMarkers[i].hours.tue_1_open} - ${restaurantsMarkers[i].hours.tue_1_close}</li>`)
 
-	var getEntertainmentInfo = function(place){
+                } else {
 
-		clearFocusWindow()
+                    $('#focusWindowHoursList').append(`<li>Tuesday CLOSED</li>`)
+                }
 
-		openFocusWindow()
+                if (restaurantsMarkers[i].hours.wed_1_open !== undefined) {
 
-		$('#focusWindowHoursList').collapse('show')
+                    $('#focusWindowHoursList').append(`<li>Wednesday ${restaurantsMarkers[i].hours.wed_1_open} - ${restaurantsMarkers[i].hours.wed_1_close}</li>`)
 
-		$('#focusWindowDescription').collapse('show')
+                } else {
 
-		insideText = place.textContent
+                    $('#focusWindowHoursList').append(`<li>Wednesday CLOSED</li>`)
+                }
 
-		for(var i = 0; i < entertainmentMarkers.length; i++){
+                if (restaurantsMarkers[i].hours.thu_1_open !== undefined) {
 
-			if(entertainmentMarkers[i].title === insideText){
+                    $('#focusWindowHoursList').append(`<li>Thursday ${restaurantsMarkers[i].hours.thu_1_open} - ${restaurantsMarkers[i].hours.thu_1_close}</li>`)
 
-				placeMarkerLocation = entertainmentMarkers[i].center
+                } else {
 
-				placeMarkerInfo = entertainmentMarkers[i] 
+                    $('#focusWindowHoursList').append(`<li>Thursday CLOSED</li>`)
+                }
 
-				placeMarkerParking = entertainmentMarkers[i].parking
+                if (restaurantsMarkers[i].hours.fri_1_open !== undefined) {
 
-				// console.log(placeMarkerParking)
+                    $('#focusWindowHoursList').append(`<li>Friday ${restaurantsMarkers[i].hours.fri_1_open} - ${restaurantsMarkers[i].hours.fri_1_close}</li>`)
 
-				$('#focusWindowPhoto').attr('src', entertainmentMarkers[i].picture.data.url)
-				$('#focusWindowName').text(entertainmentMarkers[i].title)
-				$('#focusWindowWebsite').attr('href', entertainmentMarkers[i].website)
-				$('#focusWindowFacebook').attr('href', entertainmentMarkers[i].facebook)
-				$('#focusWindowPhone').text(entertainmentMarkers[i].phone)
+                } else {
 
-			//Categories
+                    $('#focusWindowHoursList').append(`<li>Friday CLOSED</li>`)
+                }
 
-				if(entertainmentMarkers[i].categories){
+                if (restaurantsMarkers[i].hours.sat_1_open !== undefined) {
 
-					for(var j = 0; j < 1; j++){
+                    $('#focusWindowHoursList').append(`<li>Saturday ${restaurantsMarkers[i].hours.sat_1_open} - ${restaurantsMarkers[i].hours.sat_1_close}</li>`)
 
-						$('#focusWindowCategories').text(`${entertainmentMarkers[i].categories[j].name}`)
-					}
-				}	
-					
-			//Hours
+                } else {
 
-				if(entertainmentMarkers[i].hours){	
+                    $('#focusWindowHoursList').append(`<li>Saturday CLOSED</li>`)
+                }
 
-					if(entertainmentMarkers[i].hours.mon_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Monday ${entertainmentMarkers[i].hours.mon_1_open} - ${entertainmentMarkers[i].hours.mon_1_close}</li>`)
-					}
-					else {
+                if (restaurantsMarkers[i].hours.sun_1_open !== undefined) {
 
-						$('#focusWindowHoursList').append(`<li>Monday CLOSED</li>`)
-					}			
-					
-					if(entertainmentMarkers[i].hours.tue_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Tuesday ${entertainmentMarkers[i].hours.tue_1_open} - ${entertainmentMarkers[i].hours.tue_1_close}</li>`)
-					}
-					else {
+                    $('#focusWindowHoursList').append(`<li>Sunday ${restaurantsMarkers[i].hours.sun_1_open} - ${restaurantsMarkers[i].hours.sun_1_close}</li>`)
 
-						$('#focusWindowHoursList').append(`<li>Tuesday CLOSED</li>`)
-					}			
+                } else {
 
-					if(entertainmentMarkers[i].hours.wed_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Wednesday ${entertainmentMarkers[i].hours.wed_1_open} - ${entertainmentMarkers[i].hours.wed_1_close}</li>`)
-					}
-					else {
+                    $('#focusWindowHoursList').append(`<li>Sunday CLOSED</li>`)
+                }
+            } else {
 
-						$('#focusWindowHoursList').append(`<li>Wednesday CLOSED</li>`)
-					}
+                $('#focusWindowHoursList').text('N/A')
 
-					if(entertainmentMarkers[i].hours.thu_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Thursday ${entertainmentMarkers[i].hours.thu_1_open} - ${entertainmentMarkers[i].hours.thu_1_close}</li>`)
-					}
-					else {
+                // console.log('no hours info')
+            }
 
-						$('#focusWindowHoursList').append(`<li>Thursday CLOSED</li>`)
-					}
+            //Description
 
-					if(entertainmentMarkers[i].hours.fri_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Friday ${entertainmentMarkers[i].hours.fri_1_open} - ${entertainmentMarkers[i].hours.fri_1_close}</li>`)
-					}
-					else {
+            if (restaurantsMarkers[i].about !== undefined) {
 
-						$('#focusWindowHoursList').append(`<li>Friday CLOSED</li>`)
-					}
+                $('#focusWindowDescription').text(restaurantsMarkers[i].about)
+            } else {
 
-					if(entertainmentMarkers[i].hours.sat_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Saturday ${entertainmentMarkers[i].hours.sat_1_open} - ${entertainmentMarkers[i].hours.sat_1_close}</li>`)
-					}
-					else {
+                $('#focusWindowDescription').text(restaurantsMarkers[i].description)
+            }
 
-						$('#focusWindowHoursList').append(`<li>Saturday CLOSED</li>`)
-					}
-					
-					if(entertainmentMarkers[i].hours.sun_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Sunday ${entertainmentMarkers[i].hours.sun_1_open} - ${entertainmentMarkers[i].hours.sun_1_close}</li>`)
-					}
-					else {
+            //Show on Map Button
 
-						$('#focusWindowHoursList').append(`<li>Sunday CLOSED</li>`)
-					}
-				}
-				else {
+            $('#showOnMapButton').append(`<img src="/images/show_on_map_button.png" onclick="showLocationOnMap(${placeMarkerLocation})">`)
 
-					$('#focusWindowHoursList').text('N/A')
-					
-					// console.log('no hours info')
-				}	
+        }
+    }
+}
 
-				//Description	
-				if (entertainmentMarkers[i].about !== undefined){
-						
-					$('#focusWindowDescription').text(entertainmentMarkers[i].about)
-				}
-				else {
+function getEntertainmentInfo(place) {
 
-					$('#focusWindowDescription').text(entertainmentMarkers[i].description)
-				}
+    clearFocusWindow()
 
-				//Show on Map Button
+    openFocusWindow()
 
-					$('#showOnMapButton').append(`<img src="/images/show_on_map_button.png" onclick="showLocationOnMap(${placeMarkerLocation})">`)
+    $('#focusWindowHoursList').collapse('show')
 
-				
-			}
-		}
-	}
+    $('#focusWindowDescription').collapse('show')
 
-	var getRecreationInfo = function(place){
+    insideText = place.textContent
 
-		clearFocusWindow()
+    for (var i = 0; i < entertainmentMarkers.length; i++) {
 
-		openFocusWindow()
+        if (entertainmentMarkers[i].title === insideText) {
 
-		$('#focusWindowHoursList').collapse('show')
+            placeMarkerLocation = entertainmentMarkers[i].center
 
-		$('#focusWindowDescription').collapse('show')
+            placeMarkerInfo = entertainmentMarkers[i]
 
-		insideText = place.textContent
+            placeMarkerParking = entertainmentMarkers[i].parking
 
-		for(var i = 0; i < recreationMarkers.length; i++){
+            // console.log(placeMarkerParking)
 
-			if(recreationMarkers[i].title === insideText){
+            $('#focusWindowPhoto').attr('src', entertainmentMarkers[i].picture.data.url)
+            $('#focusWindowName').text(entertainmentMarkers[i].title)
+            $('#focusWindowWebsite').attr('href', entertainmentMarkers[i].website)
+            $('#focusWindowFacebook').attr('href', entertainmentMarkers[i].facebook)
+            $('#focusWindowPhone').text(entertainmentMarkers[i].phone)
 
-				placeMarkerLocation = recreationMarkers[i].center
+            //Categories
 
-				placeMarkerInfo = recreationMarkers[i]
+            if (entertainmentMarkers[i].categories) {
 
-				placeMarkerParking = recreationMarkers[i].parking
+                for (var j = 0; j < 1; j++) {
 
-				// console.log(placeMarkerParking)
+                    $('#focusWindowCategories').text(`${entertainmentMarkers[i].categories[j].name}`)
+                }
+            }
 
-				$('#focusWindowPhoto').attr('src', recreationMarkers[i].picture.data.url)
-				$('#focusWindowName').text(recreationMarkers[i].title)
-				$('#focusWindowWebsite').attr('href', recreationMarkers[i].website)
-				$('#focusWindowFacebook').attr('href', recreationMarkers[i].facebook)
-				$('#focusWindowPhone').text(recreationMarkers[i].phone)
+            //Hours
 
-			//Categories
+            if (entertainmentMarkers[i].hours) {
 
-				if(recreationMarkers[i].categories){
+                if (entertainmentMarkers[i].hours.mon_1_open !== undefined) {
 
-					for(var j = 0; j < 1; j++){
+                    $('#focusWindowHoursList').append(`<li>Monday ${entertainmentMarkers[i].hours.mon_1_open} - ${entertainmentMarkers[i].hours.mon_1_close}</li>`)
+                } else {
 
-						$('#focusWindowCategories').text(`${recreationMarkers[i].categories[j].name}`)
-					}
-				}	
+                    $('#focusWindowHoursList').append(`<li>Monday CLOSED</li>`)
+                }
 
-			//Hours
-					
-				if(recreationMarkers[i].hours) {
-					
-					if(recreationMarkers[i].hours.mon_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Monday ${recreationMarkers[i].hours.mon_1_open} - ${recreationMarkers[i].hours.mon_1_close}</li>`)
-					}
-					else {
+                if (entertainmentMarkers[i].hours.tue_1_open !== undefined) {
 
-						$('#focusWindowHoursList').append(`<li>Monday CLOSED</li>`)
-					}			
-					
-					if(recreationMarkers[i].hours.tue_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Tuesday ${recreationMarkers[i].hours.tue_1_open} - ${recreationMarkers[i].hours.tue_1_close}</li>`)
-					}
-					else {
+                    $('#focusWindowHoursList').append(`<li>Tuesday ${entertainmentMarkers[i].hours.tue_1_open} - ${entertainmentMarkers[i].hours.tue_1_close}</li>`)
+                } else {
 
-						$('#focusWindowHoursList').append(`<li>Tuesday CLOSED</li>`)
-					}			
+                    $('#focusWindowHoursList').append(`<li>Tuesday CLOSED</li>`)
+                }
 
-					if(recreationMarkers[i].hours.wed_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Wednesday ${recreationMarkers[i].hours.wed_1_open} - ${recreationMarkers[i].hours.wed_1_close}</li>`)
-					}
-					else {
+                if (entertainmentMarkers[i].hours.wed_1_open !== undefined) {
 
-						$('#focusWindowHoursList').append(`<li>Wednesday CLOSED</li>`)
-					}
+                    $('#focusWindowHoursList').append(`<li>Wednesday ${entertainmentMarkers[i].hours.wed_1_open} - ${entertainmentMarkers[i].hours.wed_1_close}</li>`)
+                } else {
 
-					if(recreationMarkers[i].hours.thu_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Thursday ${recreationMarkers[i].hours.thu_1_open} - ${recreationMarkers[i].hours.thu_1_close}</li>`)
-					}
-					else {
+                    $('#focusWindowHoursList').append(`<li>Wednesday CLOSED</li>`)
+                }
 
-						$('#focusWindowHoursList').append(`<li>Thursday CLOSED</li>`)
-					}
+                if (entertainmentMarkers[i].hours.thu_1_open !== undefined) {
 
-					if(recreationMarkers[i].hours.fri_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Friday ${recreationMarkers[i].hours.fri_1_open} - ${recreationMarkers[i].hours.fri_1_close}</li>`)
-					}
-					else {
+                    $('#focusWindowHoursList').append(`<li>Thursday ${entertainmentMarkers[i].hours.thu_1_open} - ${entertainmentMarkers[i].hours.thu_1_close}</li>`)
+                } else {
 
-						$('#focusWindowHoursList').append(`<li>Friday CLOSED</li>`)
-					}
+                    $('#focusWindowHoursList').append(`<li>Thursday CLOSED</li>`)
+                }
 
-					if(recreationMarkers[i].hours.sat_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Saturday ${recreationMarkers[i].hours.sat_1_open} - ${recreationMarkers[i].hours.sat_1_close}</li>`)
-					}
-					else {
+                if (entertainmentMarkers[i].hours.fri_1_open !== undefined) {
 
-						$('#focusWindowHoursList').append(`<li>Saturday CLOSED</li>`)
-					}
-					
-					if(recreationMarkers[i].hours.sun_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Sunday ${recreationMarkers[i].hours.sun_1_open} - ${recreationMarkers[i].hours.sun_1_close}</li>`)
-					}
-					else {
+                    $('#focusWindowHoursList').append(`<li>Friday ${entertainmentMarkers[i].hours.fri_1_open} - ${entertainmentMarkers[i].hours.fri_1_close}</li>`)
+                } else {
 
-						$('#focusWindowHoursList').append(`<li>Sunday CLOSED</li>`)
-					}
+                    $('#focusWindowHoursList').append(`<li>Friday CLOSED</li>`)
+                }
 
-				}
-				else {
+                if (entertainmentMarkers[i].hours.sat_1_open !== undefined) {
 
-					$('#focusWindowHoursList').text('N/A')
-					
-					// console.log('no hours info')
-				}
+                    $('#focusWindowHoursList').append(`<li>Saturday ${entertainmentMarkers[i].hours.sat_1_open} - ${entertainmentMarkers[i].hours.sat_1_close}</li>`)
+                } else {
 
-			//Description	
-				if (recreationMarkers[i].about !== undefined){
-					
-					$('#focusWindowDescription').text(recreationMarkers[i].about)
-				}
-				else {
+                    $('#focusWindowHoursList').append(`<li>Saturday CLOSED</li>`)
+                }
 
-					$('#focusWindowDescription').text(recreationMarkers[i].description)
-				}
+                if (entertainmentMarkers[i].hours.sun_1_open !== undefined) {
 
-			//Show on Map Button
+                    $('#focusWindowHoursList').append(`<li>Sunday ${entertainmentMarkers[i].hours.sun_1_open} - ${entertainmentMarkers[i].hours.sun_1_close}</li>`)
+                } else {
 
-					$('#showOnMapButton').append(`<img src="/images/show_on_map_button.png" onclick="showLocationOnMap(${placeMarkerLocation})">`)
+                    $('#focusWindowHoursList').append(`<li>Sunday CLOSED</li>`)
+                }
+            } else {
 
-			}
-		}
-	}
+                $('#focusWindowHoursList').text('N/A')
 
-	var getShoppingInfo = function(place){
+                // console.log('no hours info')
+            }
 
-		clearFocusWindow()
+            //Description	
+            if (entertainmentMarkers[i].about !== undefined) {
 
-		openFocusWindow()
+                $('#focusWindowDescription').text(entertainmentMarkers[i].about)
+            } else {
 
-		$('#focusWindowHoursList').collapse('show')
+                $('#focusWindowDescription').text(entertainmentMarkers[i].description)
+            }
 
-		$('#focusWindowDescription').collapse('show')
+            //Show on Map Button
 
-		insideText = place.textContent
+            $('#showOnMapButton').append(`<img src="/images/show_on_map_button.png" onclick="showLocationOnMap(${placeMarkerLocation})">`)
 
-		for(var i = 0; i < shoppingMarkers.length; i++){
 
-			if(shoppingMarkers[i].title === insideText){
+        }
+    }
+}
 
-				placeMarkerLocation = shoppingMarkers[i].center
+function getRecreationInfo(place) {
 
-				placeMarkerInfo = shoppingMarkers[i]
+    clearFocusWindow()
 
-				placeMarkerParking = shoppingMarkers[i].parking
+    openFocusWindow()
 
-				// console.log(placeMarkerParking)
+    $('#focusWindowHoursList').collapse('show')
 
-				$('#focusWindowPhoto').attr('src', shoppingMarkers[i].picture.data.url)
-				$('#focusWindowName').text(shoppingMarkers[i].title)
-				$('#focusWindowWebsite').attr('href', shoppingMarkers[i].website)
-				$('#focusWindowFacebook').attr('href', shoppingMarkers[i].facebook)
-				$('#focusWindowPhone').text(shoppingMarkers[i].phone)
+    $('#focusWindowDescription').collapse('show')
 
-			//Categories
+    insideText = place.textContent
 
-			if(shoppingMarkers[i].categories){
+    for (var i = 0; i < recreationMarkers.length; i++) {
 
-				for(var j = 0; j < 1; j++){
+        if (recreationMarkers[i].title === insideText) {
 
-					$('#focusWindowCategories').text(`${shoppingMarkers[i].categories[j].name}`)
-				}
-			}	
-				
-			//Hours
+            placeMarkerLocation = recreationMarkers[i].center
 
-				if(shoppingMarkers[i].hours) {
+            placeMarkerInfo = recreationMarkers[i]
 
-					if(shoppingMarkers[i].hours.mon_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Monday ${shoppingMarkers[i].hours.mon_1_open} - ${shoppingMarkers[i].hours.mon_1_close}</li>`)
-					}
-					else {
+            placeMarkerParking = recreationMarkers[i].parking
 
-						$('#focusWindowHoursList').append(`<li>Monday CLOSED</li>`)
-					}			
-					
-					if(shoppingMarkers[i].hours.tue_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Tuesday ${shoppingMarkers[i].hours.tue_1_open} - ${shoppingMarkers[i].hours.tue_1_close}</li>`)
-					}
-					else {
+            // console.log(placeMarkerParking)
 
-						$('#focusWindowHoursList').append(`<li>Tuesday CLOSED</li>`)
-					}			
+            $('#focusWindowPhoto').attr('src', recreationMarkers[i].picture.data.url)
+            $('#focusWindowName').text(recreationMarkers[i].title)
+            $('#focusWindowWebsite').attr('href', recreationMarkers[i].website)
+            $('#focusWindowFacebook').attr('href', recreationMarkers[i].facebook)
+            $('#focusWindowPhone').text(recreationMarkers[i].phone)
 
-					if(shoppingMarkers[i].hours.wed_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Wednesday ${shoppingMarkers[i].hours.wed_1_open} - ${shoppingMarkers[i].hours.wed_1_close}</li>`)
-					}
-					else {
+            //Categories
 
-						$('#focusWindowHoursList').append(`<li>Wednesday CLOSED</li>`)
-					}
+            if (recreationMarkers[i].categories) {
 
-					if(shoppingMarkers[i].hours.thu_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Thursday ${shoppingMarkers[i].hours.thu_1_open} - ${shoppingMarkers[i].hours.thu_1_close}</li>`)
-					}
-					else {
+                for (var j = 0; j < 1; j++) {
 
-						$('#focusWindowHoursList').append(`<li>Thursday CLOSED</li>`)
-					}
+                    $('#focusWindowCategories').text(`${recreationMarkers[i].categories[j].name}`)
+                }
+            }
 
-					if(shoppingMarkers[i].hours.fri_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Friday ${shoppingMarkers[i].hours.fri_1_open} - ${shoppingMarkers[i].hours.fri_1_close}</li>`)
-					}
-					else {
+            //Hours
 
-						$('#focusWindowHoursList').append(`<li>Friday CLOSED</li>`)
-					}
+            if (recreationMarkers[i].hours) {
 
-					if(shoppingMarkers[i].hours.sat_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Saturday ${shoppingMarkers[i].hours.sat_1_open} - ${shoppingMarkers[i].hours.sat_1_close}</li>`)
-					}
-					else {
+                if (recreationMarkers[i].hours.mon_1_open !== undefined) {
 
-						$('#focusWindowHoursList').append(`<li>Saturday CLOSED</li>`)
-					}
-					
-					if(shoppingMarkers[i].hours.sun_1_open !== undefined){
-						
-						$('#focusWindowHoursList').append(`<li>Sunday ${shoppingMarkers[i].hours.sun_1_open} - ${shoppingMarkers[i].hours.sun_1_close}</li>`)
-					}
-					else {
+                    $('#focusWindowHoursList').append(`<li>Monday ${recreationMarkers[i].hours.mon_1_open} - ${recreationMarkers[i].hours.mon_1_close}</li>`)
+                } else {
 
-						$('#focusWindowHoursList').append(`<li>Sunday CLOSED</li>`)
-					}
-				}
-				else {
+                    $('#focusWindowHoursList').append(`<li>Monday CLOSED</li>`)
+                }
 
-					$('#focusWindowHoursList').text('N/A')
-					
-					// console.log('no hours info')
-				}
+                if (recreationMarkers[i].hours.tue_1_open !== undefined) {
 
-			//Description
-				if (shoppingMarkers[i].about !== undefined){
-					
-					$('#focusWindowDescription').text(shoppingMarkers[i].about)
-				}
-				else {
-					
-					$('#focusWindowDescription').text(shoppingMarkers[i].description)
-				}
-				
-			//Show on Map Button
+                    $('#focusWindowHoursList').append(`<li>Tuesday ${recreationMarkers[i].hours.tue_1_open} - ${recreationMarkers[i].hours.tue_1_close}</li>`)
+                } else {
 
-					$('#showOnMapButton').append(`<img src="/images/show_on_map_button.png" onclick="showLocationOnMap(${placeMarkerLocation})">`)
+                    $('#focusWindowHoursList').append(`<li>Tuesday CLOSED</li>`)
+                }
 
-			}
-		}
-	}
+                if (recreationMarkers[i].hours.wed_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Wednesday ${recreationMarkers[i].hours.wed_1_open} - ${recreationMarkers[i].hours.wed_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Wednesday CLOSED</li>`)
+                }
+
+                if (recreationMarkers[i].hours.thu_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Thursday ${recreationMarkers[i].hours.thu_1_open} - ${recreationMarkers[i].hours.thu_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Thursday CLOSED</li>`)
+                }
+
+                if (recreationMarkers[i].hours.fri_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Friday ${recreationMarkers[i].hours.fri_1_open} - ${recreationMarkers[i].hours.fri_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Friday CLOSED</li>`)
+                }
+
+                if (recreationMarkers[i].hours.sat_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Saturday ${recreationMarkers[i].hours.sat_1_open} - ${recreationMarkers[i].hours.sat_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Saturday CLOSED</li>`)
+                }
+
+                if (recreationMarkers[i].hours.sun_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Sunday ${recreationMarkers[i].hours.sun_1_open} - ${recreationMarkers[i].hours.sun_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Sunday CLOSED</li>`)
+                }
+
+            } else {
+
+                $('#focusWindowHoursList').text('N/A')
+
+                // console.log('no hours info')
+            }
+
+            //Description	
+            if (recreationMarkers[i].about !== undefined) {
+
+                $('#focusWindowDescription').text(recreationMarkers[i].about)
+            } else {
+
+                $('#focusWindowDescription').text(recreationMarkers[i].description)
+            }
+
+            //Show on Map Button
+
+            $('#showOnMapButton').append(`<img src="/images/show_on_map_button.png" onclick="showLocationOnMap(${placeMarkerLocation})">`)
+
+        }
+    }
+}
+
+function getShoppingInfo(place) {
+
+    clearFocusWindow()
+
+    openFocusWindow()
+
+    $('#focusWindowHoursList').collapse('show')
+
+    $('#focusWindowDescription').collapse('show')
+
+    insideText = place.textContent
+
+    for (var i = 0; i < shoppingMarkers.length; i++) {
+
+        if (shoppingMarkers[i].title === insideText) {
+
+            placeMarkerLocation = shoppingMarkers[i].center
+
+            placeMarkerInfo = shoppingMarkers[i]
+
+            placeMarkerParking = shoppingMarkers[i].parking
+
+            // console.log(placeMarkerParking)
+
+            $('#focusWindowPhoto').attr('src', shoppingMarkers[i].picture.data.url)
+            $('#focusWindowName').text(shoppingMarkers[i].title)
+            $('#focusWindowWebsite').attr('href', shoppingMarkers[i].website)
+            $('#focusWindowFacebook').attr('href', shoppingMarkers[i].facebook)
+            $('#focusWindowPhone').text(shoppingMarkers[i].phone)
+
+            //Categories
+
+            if (shoppingMarkers[i].categories) {
+
+                for (var j = 0; j < 1; j++) {
+
+                    $('#focusWindowCategories').text(`${shoppingMarkers[i].categories[j].name}`)
+                }
+            }
+
+            //Hours
+
+            if (shoppingMarkers[i].hours) {
+
+                if (shoppingMarkers[i].hours.mon_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Monday ${shoppingMarkers[i].hours.mon_1_open} - ${shoppingMarkers[i].hours.mon_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Monday CLOSED</li>`)
+                }
+
+                if (shoppingMarkers[i].hours.tue_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Tuesday ${shoppingMarkers[i].hours.tue_1_open} - ${shoppingMarkers[i].hours.tue_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Tuesday CLOSED</li>`)
+                }
+
+                if (shoppingMarkers[i].hours.wed_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Wednesday ${shoppingMarkers[i].hours.wed_1_open} - ${shoppingMarkers[i].hours.wed_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Wednesday CLOSED</li>`)
+                }
+
+                if (shoppingMarkers[i].hours.thu_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Thursday ${shoppingMarkers[i].hours.thu_1_open} - ${shoppingMarkers[i].hours.thu_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Thursday CLOSED</li>`)
+                }
+
+                if (shoppingMarkers[i].hours.fri_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Friday ${shoppingMarkers[i].hours.fri_1_open} - ${shoppingMarkers[i].hours.fri_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Friday CLOSED</li>`)
+                }
+
+                if (shoppingMarkers[i].hours.sat_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Saturday ${shoppingMarkers[i].hours.sat_1_open} - ${shoppingMarkers[i].hours.sat_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Saturday CLOSED</li>`)
+                }
+
+                if (shoppingMarkers[i].hours.sun_1_open !== undefined) {
+
+                    $('#focusWindowHoursList').append(`<li>Sunday ${shoppingMarkers[i].hours.sun_1_open} - ${shoppingMarkers[i].hours.sun_1_close}</li>`)
+                } else {
+
+                    $('#focusWindowHoursList').append(`<li>Sunday CLOSED</li>`)
+                }
+            } else {
+
+                $('#focusWindowHoursList').text('N/A')
+
+                // console.log('no hours info')
+            }
+
+            //Description
+            if (shoppingMarkers[i].about !== undefined) {
+
+                $('#focusWindowDescription').text(shoppingMarkers[i].about)
+            } else {
+
+                $('#focusWindowDescription').text(shoppingMarkers[i].description)
+            }
+
+            //Show on Map Button
+
+            $('#showOnMapButton').append(`<img src="/images/show_on_map_button.png" onclick="showLocationOnMap(${placeMarkerLocation})">`)
+
+        }
+    }
+}
 
 //FOCUS WINDOW ==================================================================================================================================
 
-	function openFocusWindow() {
+function openFocusWindow() {
 
-		checkFocusWindowVisibility()
-	    
-	    if(document.getElementById('focusWindow').style.visibility !== "visible"){
+    checkFocusWindowVisibility()
 
-		    map.panBy(100,0)
-	    }
+    if (document.getElementById('focusWindow').style.visibility !== "visible") {
 
-	    document.getElementById("focusWindow").style.visibility = "visible"
-	    document.getElementById("main").style.width = "75vw"
-	    document.getElementById("main").style.marginRight = "0"
+        map.panBy(100, 0)
+    }
 
-    	google.maps.event.trigger(map, 'resize');
+    document.getElementById("focusWindow").style.visibility = "visible"
+    document.getElementById("main").style.width = "75vw"
+    document.getElementById("main").style.marginRight = "0"
 
-	}
+    google.maps.event.trigger(map, 'resize');
 
-	function closeFocusWindow() {
+}
 
-		checkFocusWindowVisibility()
+function closeFocusWindow() {
 
-    	document.getElementById('focusWindow').style.visibility = "hidden"
-    	document.getElementById('main').style.width = "95vw"
-    	document.getElementById('main').style.margin = 'auto'
+    checkFocusWindowVisibility()
 
-    	google.maps.event.trigger(map, 'resize');
-    	// document.getElementById("main").style.marginRight = ""
-	}
+    document.getElementById('focusWindow').style.visibility = "hidden"
+    document.getElementById('main').style.width = "95vw"
+    document.getElementById('main').style.margin = 'auto'
+
+    google.maps.event.trigger(map, 'resize');
+    // document.getElementById("main").style.marginRight = ""
+}
 
 //PLACE INFO AND MARKERS ========================================================================================================================
 
-	var showLocationOnMap = function(coordinates){
+function showLocationOnMap(coordinates) {
 
-		// console.log(placeMarkerParking)
+    // console.log(placeMarkerParking)
 
-		clearPlaceInfoWindows()
+    clearPlaceInfoWindows()
 
-		if(centerMarker !== null){
-			
-			hideCenterMarker()
-			showMarkers()
-			clearParkingMarkers()
-		}
+    if (centerMarker !== null) {
 
-		map.setCenter(coordinates)
-		map.setZoom(19)
-		map.setMapTypeId('hybrid')
+        hideCenterMarker()
+        showMarkers()
+        clearParkingMarkers()
+    }
 
-		// console.log(placeMarkerInfo)
+    map.setCenter(coordinates)
+    map.setZoom(19)
+    map.setMapTypeId('hybrid')
 
-		parkingSearchLat = coordinates.lat
-		parkingSearchLng = coordinates.lng
+    // console.log(placeMarkerInfo)
 
-		placeInfoWindow = new google.maps.InfoWindow({
-			maxWidth: 500,
-			pixelOffset: new google.maps.Size(0,-30),
+    parkingSearchLat = coordinates.lat
+    parkingSearchLng = coordinates.lng
 
-		})
+    placeInfoWindow = new google.maps.InfoWindow({
+        maxWidth: 500,
+        pixelOffset: new google.maps.Size(0, -30),
 
-		//GET REQUEST TO GOOGLE FOR PLACE DETAILS
+    })
 
-		$.get(`/place?query=${placeMarkerInfo.title}&location=${parkingSearchLat},${parkingSearchLng}`, function(googlePlaceSearchData, status){
+    //GET REQUEST TO GOOGLE FOR PLACE DETAILS
 
-			$(document).ajaxComplete(function(event) {
-				
-				// console.log('google place complete')
-			})
+    $.get(`/place?query=${placeMarkerInfo.title}&location=${parkingSearchLat},${parkingSearchLng}`, function(googlePlaceSearchData, status) {
 
-			googlePlaceSearchData = JSON.parse(googlePlaceSearchData)
+        $(document).ajaxComplete(function(event) {
 
-			// console.log('place search', googlePlaceSearchData)
+            // console.log('google place complete')
+        })
 
-			locationAddress = googlePlaceSearchData.results[0].formatted_address
+        googlePlaceSearchData = JSON.parse(googlePlaceSearchData)
 
-			var request = {
-				placeId: googlePlaceSearchData.results[0].place_id
-			}
+        // console.log('place search', googlePlaceSearchData)
 
-			service = new google.maps.places.PlacesService(map);
-			
-			service.getDetails(request, callback)
+        locationAddress = googlePlaceSearchData.results[0].formatted_address
 
-			function callback(locationDetails, status) {
-			  
-		  		if (status === google.maps.places.PlacesServiceStatus.OK) {
-		    
-		    		// console.log('locationDetails', locationDetails)
-		    		
-		    		if (locationDetails.photos){
+        var request = {
+            placeId: googlePlaceSearchData.results[0].place_id
+        }
 
-			    		var random = Math.floor(Math.random() * locationDetails.photos.length)
+        service = new google.maps.places.PlacesService(map);
 
-			    		var locationPhoto = locationDetails.photos[random].getUrl({'maxWidth': 250, 'maxHeight': 175})
-			    	}
+        service.getDetails(request, callback)
 
-			    	var currentState
-			    	var currentStateImg
-			    
-			    //HOURS DISPLAY
+        function callback(locationDetails, status) {
 
-			    	if(locationDetails.opening_hours){
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
 
-			    		currentState = locationDetails.opening_hours.open_now
+                // console.log('locationDetails', locationDetails)
 
-			    		if(currentState === true){
+                if (locationDetails.photos) {
 
-			    			currentStateImg = '/images/open_icon.png'
-			    		}
+                    var random = Math.floor(Math.random() * locationDetails.photos.length)
 
-			    		else{
+                    var locationPhoto = locationDetails.photos[random].getUrl({ 'maxWidth': 250, 'maxHeight': 175 })
+                }
 
-			    			currentStateImg = '/images/Close-icon.png'
-			    		}
+                var currentState
+                var currentStateImg
 
-			    		// console.log('currentState? ', currentState)
-			    	}
-			    	else{
-			    		
-			    		// console.log('no hours info')
-			    	}
+                //HOURS DISPLAY
 
-			    //PARKING DISPLAY
+                if (locationDetails.opening_hours) {
 
-			    if(placeMarkerParking !== undefined){			   
+                    currentState = locationDetails.opening_hours.open_now
 
-			    	if(placeMarkerParking.lot === 1 ){
+                    if (currentState === true) {
 
-			    		var parkingLot = "Yes"
-			    	}
-			    	else{
+                        currentStateImg = '/images/open_icon.png'
+                    } else {
 
-			    		parkingLot = "No"
-			    	}
+                        currentStateImg = '/images/Close-icon.png'
+                    }
 
-			    	if(placeMarkerParking.street === 1){
+                    // console.log('currentState? ', currentState)
+                } else {
 
-			    		var parkingStreet = "Yes"
-			    	}
-			    	else{
+                    // console.log('no hours info')
+                }
 
-			    		parkingStreet = "No"
-			    	}
+                //PARKING DISPLAY
 
-			    	if(placeMarkerParking.valet === 1){
+                if (placeMarkerParking !== undefined) {
 
-			    		var parkingValet = "Yes"
-			    	}
-			    	else{
+                    if (placeMarkerParking.lot === 1) {
 
-			    		parkingValet = "No"
-			    	}
+                        var parkingLot = "Yes"
+                    } else {
 
-			    }
+                        parkingLot = "No"
+                    }
 
-			   	else{
+                    if (placeMarkerParking.street === 1) {
 
-			   		parkingLot = 'No'
-			   		parkingStreet = 'No'
-			   		parkingValet = 'No'
+                        var parkingStreet = "Yes"
+                    } else {
 
-			   	}
-					var locationMarkerContent = 
-						`
+                        parkingStreet = "No"
+                    }
+
+                    if (placeMarkerParking.valet === 1) {
+
+                        var parkingValet = "Yes"
+                    } else {
+
+                        parkingValet = "No"
+                    }
+
+                } else {
+
+                    parkingLot = 'No'
+                    parkingStreet = 'No'
+                    parkingValet = 'No'
+
+                }
+                var locationMarkerContent =
+                    `
 							<div class="placeInfoWindowStyle">
 								<div class="placeInfoWindowTitleContainer">
 									<h3 class="placeInfoWindowTitle">${placeMarkerInfo.title}</h3>
@@ -2069,151 +2019,152 @@ $(document).ready(function(){
 							</div>
 						`
 
-					google.maps.event.addListener(placeInfoWindow, 'domready', function() {
+                google.maps.event.addListener(placeInfoWindow, 'domready', function() {
 
-	   					var iwOuter = $('.gm-style-iw')
+                    var iwOuter = $('.gm-style-iw')
 
-					   	var iwBackground = iwOuter.prev()
+                    var iwBackground = iwOuter.prev()
 
-					   	iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+                    iwBackground.children(':nth-child(2)').css({ 'display': 'none' })
 
-					   	iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+                    iwBackground.children(':nth-child(4)').css({ 'display': 'none' })
 
-					   	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1', 'background-color' : '#2A2A2A', 'border' : '1px solid grey'});
+                    iwBackground.children(':nth-child(3)').find('div').children().css({ 'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index': '1', 'background-color': '#2A2A2A', 'border': '1px solid grey' });
 
 
-				  		var iwCloseBtn = iwOuter.next()
+                    var iwCloseBtn = iwOuter.next()
 
-						iwCloseBtn.css({
-						  opacity: '1', // by default the close button has an opacity of 0.7
-						  padding: '.4rem',
-						  textAlign: 'center',
-						  right: '34px', top: '4px', // button repositioning
-						  border: '5px solid #282828', // increasing button border and new color
-						  'border-radius': '13px', // circular effect
-						  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
-						  });
+                    iwCloseBtn.css({
+                        opacity: '1', // by default the close button has an opacity of 0.7
+                        padding: '.4rem',
+                        textAlign: 'center',
+                        right: '34px',
+                        top: '4px', // button repositioning
+                        border: '5px solid #282828', // increasing button border and new color
+                        'border-radius': '13px', // circular effect
+                        'box-shadow': '0 0 5px black' // 3D effect to highlight the button
+                    });
 
-					   var iwBackground = iwOuter.prev()
+                    var iwBackground = iwOuter.prev()
 
-					   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+                    iwBackground.children(':nth-child(2)').css({ 'display': 'none' })
 
-					   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
-					})
+                    iwBackground.children(':nth-child(4)').css({ 'display': 'none' })
+                })
 
-					placeInfoWindow.setContent(locationMarkerContent)
-					placeInfoWindow.setPosition({
-					    lat: coordinates.lat,
-					    lng: coordinates.lng
-					})
-		
-					placeInfoWindows.push(placeInfoWindow)
+                placeInfoWindow.setContent(locationMarkerContent)
+                placeInfoWindow.setPosition({
+                    lat: coordinates.lat,
+                    lng: coordinates.lng
+                })
 
-					placeInfoWindow.open(map)
-		  		}
-			}
-		})
-	}
+                placeInfoWindows.push(placeInfoWindow)
+
+                placeInfoWindow.open(map)
+            }
+        }
+    })
+}
 
 //PARKING INFO ==================================================================================================================================
 
-	var getParkingData = function(){
+function getParkingData() {
 
-		//GET REQUEST TO GOOGLE PLACE SEARCH FOR PARKING
+    //GET REQUEST TO GOOGLE PLACE SEARCH FOR PARKING
 
-		var parkingDistance = null
-		var parkingDuration = null
+    var parkingDistance = null
+    var parkingDuration = null
 
 
-		$.get(`/parking?location=${parkingSearchLat},${parkingSearchLng}`, function(googleParkingData, status){
+    $.get(`/parking?location=${parkingSearchLat},${parkingSearchLng}`, function(googleParkingData, status) {
 
-			$(document).ajaxComplete(function(event, xhr, settings) {
-				
-				// console.log('google parking complete')
-			})
-				
-				googleParkingData = JSON.parse(googleParkingData)
+        $(document).ajaxComplete(function(event, xhr, settings) {
 
-				var filteredParkingData = []
-				var slicedFilteredParkingData = []
+            // console.log('google parking complete')
+        })
 
-				for(var i = 0; i < googleParkingData.results.length; i++){
+        googleParkingData = JSON.parse(googleParkingData)
 
-					if(googleParkingData.results[i].types[0] === "parking") {
+        var filteredParkingData = []
+        var slicedFilteredParkingData = []
 
-						filteredParkingData.push(googleParkingData.results[i])
-					}
+        for (var i = 0; i < googleParkingData.results.length; i++) {
 
-					if(filteredParkingData.length >= 5){
+            if (googleParkingData.results[i].types[0] === "parking") {
 
-						slicedFilteredParkingData = filteredParkingData.slice(0,5)
-					}
+                filteredParkingData.push(googleParkingData.results[i])
+            }
 
-					else{
+            if (filteredParkingData.length >= 5) {
 
-						slicedFilteredParkingData = filteredParkingData
-					}
-				}
+                slicedFilteredParkingData = filteredParkingData.slice(0, 5)
+            } else {
 
-				if (slicedFilteredParkingData.length > 0) {
-				
-					hideMarkers()
+                slicedFilteredParkingData = filteredParkingData
+            }
+        }
 
-					clearParkingMarkers()
+        if (slicedFilteredParkingData.length > 0) {
 
-					placeInfoWindow.close()
+            hideMarkers()
 
-					parkingMarkers = slicedFilteredParkingData.map(function(location, i) {
-						
-						return new google.maps.Marker({
-							map: map,
-							position: new google.maps.LatLng(location.geometry.location),
-							icon: '/images/parking_icon.png',
-							title: location.name,
-							id: location.place_id,
-							visible: true,
-						})
-					})
+            clearParkingMarkers()
 
-					centerMarker = new google.maps.Marker({
+            placeInfoWindow.close()
 
-							map: map,
-							position: new google.maps.LatLng({
-							lat: parkingSearchLat,
-							lng: parkingSearchLng
-							}),
-							icon: '/images/target_icon.png',
-							visible: true
-					})
+            // console.log("slicedFilteredParkingData ", slicedFilteredParkingData)
 
-					centerMarkers.push(centerMarker)
+            parkingMarkers = slicedFilteredParkingData.map(function(location, i) {
 
-					centerMarker.addListener('click', function(){
+                return new google.maps.Marker({
+                    map: map,
+                    position: new google.maps.LatLng(location.geometry.location),
+                    icon: '/images/parking_icon.png',
+                    title: location.name,
+                    id: location.place_id,
+                    visible: true,
+                })
+            })
 
-						placeInfoWindow.open(map)
-					})
+            centerMarker = new google.maps.Marker({
 
-					parkingMarkers.forEach(function(marker){
+                map: map,
+                position: new google.maps.LatLng({
+                    lat: parkingSearchLat,
+                    lng: parkingSearchLng
+                }),
+                icon: '/images/target_icon.png',
+                visible: true
+            })
 
-						marker.addListener('click', function(){
+            centerMarkers.push(centerMarker)
 
-							$.get(`/distance?origins=${parkingSearchLat},${parkingSearchLng}&destinations=${marker.id}`, function(googleParkingDistanceData, status){
+            centerMarker.addListener('click', function() {
 
-								googleParkingDistanceData = JSON.parse(googleParkingDistanceData)
+                placeInfoWindow.open(map)
+            })
 
-								parkingDistance = googleParkingDistanceData.rows[0].elements[0].distance.text
-								parkingDuration = googleParkingDistanceData.rows[0].elements[0].duration.text
+            parkingMarkers.forEach(function(marker) {
 
-								// console.log(googleParkingDistanceData)
+                marker.addListener('click', function() {
 
-								clearParkingInfoWindows()
+                    $.get(`/distance?origins=${parkingSearchLat},${parkingSearchLng}&destinations=${marker.id}`, function(googleParkingDistanceData, status) {
 
-								parkingInfoWindow = new google.maps.InfoWindow({
-									maxWidth: 300,
-									pixelOffset: new google.maps.Size(0,-35),
-								})
+                        googleParkingDistanceData = JSON.parse(googleParkingDistanceData)
 
-								var parkingInfoWindowContent = `
+                        parkingDistance = googleParkingDistanceData.rows[0].elements[0].distance.text
+                        parkingDuration = googleParkingDistanceData.rows[0].elements[0].duration.text
+
+                        // console.log("googleParkingDistanceData ", googleParkingDistanceData)
+
+                        clearParkingInfoWindows()
+
+                        parkingInfoWindow = new google.maps.InfoWindow({
+                            maxWidth: 300,
+                            pixelOffset: new google.maps.Size(0, -35),
+                        })
+
+                        var parkingInfoWindowContent = `
 										
 										<div class="placeInfoWindowStyle">
 											<div id="parkingInfoWindow">
@@ -2224,354 +2175,334 @@ $(document).ready(function(){
 												</ul>
 											</div>
 										</div>	
-									`	
+									`
 
-								google.maps.event.addListener(parkingInfoWindow, 'domready', function() {
+                        google.maps.event.addListener(parkingInfoWindow, 'domready', function() {
 
-			   					var iwOuter = $('.gm-style-iw')
+                            var iwOuter = $('.gm-style-iw')
 
-							   	var iwBackground = iwOuter.prev()
+                            var iwBackground = iwOuter.prev()
 
-							   	iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+                            iwBackground.children(':nth-child(2)').css({ 'display': 'none' })
 
-							   	iwBackground.children(':nth-child(4)').css({'display' : 'none'})
+                            iwBackground.children(':nth-child(4)').css({ 'display': 'none' })
 
-							   	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1', 'background-color' : '#2A2A2A', 'border' : '1px solid grey'});
+                            iwBackground.children(':nth-child(3)').find('div').children().css({ 'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index': '1', 'background-color': '#2A2A2A', 'border': '1px solid grey' });
 
 
-						  		var iwCloseBtn = iwOuter.next()
+                            var iwCloseBtn = iwOuter.next()
 
-								iwCloseBtn.css({
-								  opacity: '1', // by default the close button has an opacity of 0.7
-								  padding: '.4rem',
-								  textAlign: 'center',
-								  right: '34px', top: '4px', // button repositioning
-								  border: '5px solid #282828', // increasing button border and new color
-								  'border-radius': '13px', // circular effect
-								  'box-shadow': '0 0 5px black' // 3D effect to highlight the button
-								  });
+                            iwCloseBtn.css({
+                                opacity: '1', // by default the close button has an opacity of 0.7
+                                padding: '.4rem',
+                                textAlign: 'center',
+                                right: '34px',
+                                top: '4px', // button repositioning
+                                border: '5px solid #282828', // increasing button border and new color
+                                'border-radius': '13px', // circular effect
+                                'box-shadow': '0 0 5px black' // 3D effect to highlight the button
+                            });
 
-							   var iwBackground = iwOuter.prev()
+                            var iwBackground = iwOuter.prev()
 
-							   iwBackground.children(':nth-child(2)').css({'display' : 'none'})
+                            iwBackground.children(':nth-child(2)').css({ 'display': 'none' })
 
-							   iwBackground.children(':nth-child(4)').css({'display' : 'none'})
-							})
+                            iwBackground.children(':nth-child(4)').css({ 'display': 'none' })
+                        })
 
-								parkingInfoWindow.setContent(parkingInfoWindowContent)
-								parkingInfoWindow.setPosition(marker.position)
+                        parkingInfoWindow.setContent(parkingInfoWindowContent)
+                        parkingInfoWindow.setPosition(marker.position)
 
-								parkingInfoWindows.push(parkingInfoWindow)
+                        parkingInfoWindows.push(parkingInfoWindow)
 
-								parkingInfoWindow.open(map)
+                        parkingInfoWindow.open(map)
 
-							})
-						})
-					})
+                    })
+                })
+            })
 
-					map.setMapTypeId('dark')
-					map.setZoom(16)
+            map.setMapTypeId('dark')
+            map.setZoom(16)
 
-					// map.panBy(100,0)
+            // map.panBy(100,0)
 
-					// console.log('parking data', slicedFilteredParkingData)
-				
-				
-					var parkingCircleCenter = {
-						lat: parkingSearchLat,
-						lng: parkingSearchLng
-					}
+            // console.log('parking data', slicedFilteredParkingData)
 
-					parkingSearchCircle = new google.maps.Circle({
-					      
-					      strokeColor: '#FF4B3B',
-					      strokeOpacity: 0.3,
-					      strokeWeight: 3,
-					      fillColor: '#FF4B3B',
-					      fillOpacity: 0.1,
-					      map: map,
-					      center: parkingCircleCenter,
-					      radius: 800,
-					})
 
-					    parkingSearchCircle.setMap(map)
-			}
+            var parkingCircleCenter = {
+                lat: parkingSearchLat,
+                lng: parkingSearchLng
+            }
 
-			else {
+            parkingSearchCircle = new google.maps.Circle({
 
-				alert('No Additional Parking Available')
+                strokeColor: '#FF4B3B',
+                strokeOpacity: 0.3,
+                strokeWeight: 3,
+                fillColor: '#FF4B3B',
+                fillOpacity: 0.1,
+                map: map,
+                center: parkingCircleCenter,
+                radius: 800,
+            })
 
-				return
-			}
-		})
-	}
+            parkingSearchCircle.setMap(map)
+        } else {
+
+            alert('No Additional Parking Available')
+
+            return
+        }
+    })
+}
 
 //FUNCTIONS =====================================================================================================================================
 
-	var callNewModal = function(){
+function callNewModal() {
 
-		$('#locationTextField').val('')
-		$('.modal').modal('show')
-		$('.modal').on('shown.bs.modal', function() {
-			$("#locationTextField").focus();
-		})
-	}
+    $('#locationTextField').val('')
+    $('.modal').modal('show')
+    $('.modal').on('shown.bs.modal', function() {
+        $("#locationTextField").focus();
+    })
+}
 
-	var repaintAllClusters = function(){
+function repaintAllClusters() {
 
-		restaurantsMarkerCluster.repaint()
-		entertainmentMarkerCluster.repaint()
-		recreationMarkerCluster.repaint()
-		shoppingMarkerCluster.repaint()
-	}
+    restaurantsMarkerCluster.repaint()
+    entertainmentMarkerCluster.repaint()
+    recreationMarkerCluster.repaint()
+    shoppingMarkerCluster.repaint()
+}
 
-	var toggleLegend = function(){
+function toggleLegend() {
 
-		$('#legendContainer').collapse('toggle')
-	}
+    $('#legendContainer').collapse('toggle')
+}
 
-	var clearInfoWindows = function(){
+function clearInfoWindows() {
 
-		for(var i = 0; i < restaurantsInfoWindows.length; i++){
+    for (var i = 0; i < restaurantsInfoWindows.length; i++) {
 
-			restaurantsInfoWindows[i].close()
-		}
+        restaurantsInfoWindows[i].close()
+    }
 
-		for(var i = 0; i < entertainmentInfoWindows.length; i++){
+    for (var i = 0; i < entertainmentInfoWindows.length; i++) {
 
-			entertainmentInfoWindows[i].close()
-		}
+        entertainmentInfoWindows[i].close()
+    }
 
-		for(var i = 0; i < recreationInfoWindows.length; i++){
+    for (var i = 0; i < recreationInfoWindows.length; i++) {
 
-			recreationInfoWindows[i].close()
-		}
-	
-		for(var i = 0; i < shoppingInfoWindows.length; i++){
+        recreationInfoWindows[i].close()
+    }
 
-			shoppingInfoWindows[i].close()
-		}	
-	}
+    for (var i = 0; i < shoppingInfoWindows.length; i++) {
 
-	var clearPlaceInfoWindows = function(){
+        shoppingInfoWindows[i].close()
+    }
+}
 
-		if(placeInfoWindow !== undefined){
+function clearPlaceInfoWindows() {
 
-			placeInfoWindow.close()
-		}
+    if (placeInfoWindow !== undefined) {
 
-		for(var i = 0; i < placeInfoWindows.length; i++){
+        placeInfoWindow.close()
+    }
 
-			placeInfoWindows[i].close()
-		}
+    for (var i = 0; i < placeInfoWindows.length; i++) {
 
-		placeInfoWindows.length = 0
-	}
+        placeInfoWindows[i].close()
+    }
 
-	var clearParkingInfoWindows = function(){
+    placeInfoWindows.length = 0
+}
 
-		for(var i = 0; i < parkingInfoWindows.length; i++){
+function clearParkingInfoWindows() {
 
-			parkingInfoWindows[i].close()
-		}
-	}
+    for (var i = 0; i < parkingInfoWindows.length; i++) {
 
-	var clearFocusWindow = function(){
+        parkingInfoWindows[i].close()
+    }
+}
 
-		$('#focusWindowPhoto').attr('src', '')
-		$('#focusWindowName').text('')
-		$('#focusWindowWebsite').attr('href', '')
-		$('#focusWindowFacebook').attr('href', '')
-		$('#focusWindowPhone').text('')
-		$('#focusWindowDescription').text('')
-		$('#focusWindowHoursList').empty()
-		$('#showOnMapButton').empty()
-	}
+function clearFocusWindow() {
 
-	var resetCheckboxes = function(){
+    $('#focusWindowPhoto').attr('src', '')
+    $('#focusWindowName').text('')
+    $('#focusWindowWebsite').attr('href', '')
+    $('#focusWindowFacebook').attr('href', '')
+    $('#focusWindowPhone').text('')
+    $('#focusWindowDescription').text('')
+    $('#focusWindowHoursList').empty()
+    $('#showOnMapButton').empty()
+}
 
-		$('#foodCheckbox').prop('checked', true)
-		$('#artsCheckbox').prop('checked', true)
-		$('#fitnessCheckbox').prop('checked', true)
-		$('#shoppingCheckbox').prop('checked', true)
-	}
+function resetCheckboxes() {
 
-	var resetZoom = function(){
+    $('#foodCheckbox').prop('checked', true)
+    $('#artsCheckbox').prop('checked', true)
+    $('#fitnessCheckbox').prop('checked', true)
+    $('#shoppingCheckbox').prop('checked', true)
+}
 
-		showMarkers()
+function resetZoom() {
 
-		clearPlaceInfoWindows()
+    showMarkers()
 
-		clearParkingInfoWindows()
+    clearPlaceInfoWindows()
 
-  		clearInfoWindows()
+    clearParkingInfoWindows()
 
-  		clearParkingMarkers()
+    clearInfoWindows()
 
-  		toggleRestaurants()
+    clearParkingMarkers()
 
-  		toggleEntertainment()
+    toggleRestaurants()
 
-  		toggleRecreation()
+    toggleEntertainment()
 
-  		toggleShopping()
+    toggleRecreation()
 
-  		if(centerMarker !== null){
-  			
-  			hideCenterMarker()
-  		}
+    toggleShopping()
 
-		map.setMapTypeId('dark')
+    if (centerMarker !== null) {
 
-		if(parkingSearchCircle){
+        hideCenterMarker()
+    }
 
-			parkingSearchCircle.setMap(null)
-		}
-  			
-  		map.setCenter(place.geometry.location)
+    map.setMapTypeId('dark')
 
- 	  	// if(document.getElementById('focusWindow').style.visibility === "visible"){
+    if (parkingSearchCircle) {
 
-	    // 	// map.panBy(100,0)
-    	// }
+        parkingSearchCircle.setMap(null)
+    }
 
-		if(map.getZoom() !== 14) {
-  				
-  			map.setZoom(14)
-  		}
-	}
+    map.setCenter(place.geometry.location)
 
-	var clearParkingMarkers = function(){
+    // if(document.getElementById('focusWindow').style.visibility === "visible"){
 
-		// console.log(parkingMarkers)
-		if(parkingSearchCircle){
+    // 	// map.panBy(100,0)
+    // }
 
-			parkingSearchCircle.setMap(null)
-		}
+    if (map.getZoom() !== 14) {
 
-		for(var i = 0; i < parkingMarkers.length; i++){
+        map.setZoom(14)
+    }
+}
 
-			parkingMarkers[i].setVisible(false)
-			parkingMarkers[i].setMap(null)
-		}
-	}
+function clearParkingMarkers() {
 
-	var hideMarkers = function(){
+    // console.log(parkingMarkers)
+    if (parkingSearchCircle) {
 
-		for (var i in restaurantsMarkers) {
-		    
-		    restaurantsMarkers[i].setVisible(false)
-		}
+        parkingSearchCircle.setMap(null)
+    }
 
-		for (var i in entertainmentMarkers) {
-		    
-		    entertainmentMarkers[i].setVisible(false)
-		}
+    for (var i = 0; i < parkingMarkers.length; i++) {
 
-		for (var i in recreationMarkers) {
-		    
-		    recreationMarkers[i].setVisible(false)
-		}
+        parkingMarkers[i].setVisible(false)
+        parkingMarkers[i].setMap(null)
+    }
+}
 
-		for (var i in shoppingMarkers) {
-		    
-		    shoppingMarkers[i].setVisible(false)
-		}
-	}
+function hideMarkers() {
 
-	var showMarkers = function(){
+    for (var i in restaurantsMarkers) {
 
-		for (var i in restaurantsMarkers) {
-		    
-		    restaurantsMarkers[i].setVisible(true)
-		}
+        restaurantsMarkers[i].setVisible(false)
+    }
 
-		for (var i in entertainmentMarkers) {
-		    
-		    entertainmentMarkers[i].setVisible(true)
-		}
+    for (var i in entertainmentMarkers) {
 
-		for (var i in recreationMarkers) {
-		    
-		    recreationMarkers[i].setVisible(true)
-		}
+        entertainmentMarkers[i].setVisible(false)
+    }
 
-		for (var i in shoppingMarkers) {
-		    
-		    shoppingMarkers[i].setVisible(true)
-		}
-	}
+    for (var i in recreationMarkers) {
 
-	var hideCenterMarker = function(){
+        recreationMarkers[i].setVisible(false)
+    }
 
- 		for(var i in centerMarkers) {
-			 
-			centerMarkers[i].setVisible(false)
-  			centerMarkers[i].setMap(null)
-  		}
+    for (var i in shoppingMarkers) {
 
-  		centerMarkers = []
-	}
+        shoppingMarkers[i].setVisible(false)
+    }
+}
 
-	var checkFocusWindowVisibility = function(){
+function showMarkers() {
 
-			if(document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() > 1024) {
+    for (var i in restaurantsMarkers) {
 
-				$('#focusWindow').css('width', '25vw')
-				$('#main').css({
-					'width' : '75vw',
-					'marginLeft' : '25vw',
-					'marginRight' : '0',
-					})
-			}
+        restaurantsMarkers[i].setVisible(true)
+    }
 
-			else if(document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() > 768 && $(window).width() < 1024) {
+    for (var i in entertainmentMarkers) {
 
-				$('#focusWindow').css('width', '35vw')
-				$('#main').css({
-					'width' : '65vw',
-					'marginLeft' : '35vw',
-					'marginRight' : '0',
-					})
-			}
+        entertainmentMarkers[i].setVisible(true)
+    }
 
-			else if(document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() > 512 && $(window).width() < 768) {
+    for (var i in recreationMarkers) {
 
-				$('#focusWindow').css('width', '40vw')
-				$('#main').css({
-					'width' : '60vw',
-					'marginLeft' : '40vw',
-					'marginRight' : '0',
-					})
-			}
+        recreationMarkers[i].setVisible(true)
+    }
 
-			else if(document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() < 512) {
+    for (var i in shoppingMarkers) {
 
-				$('#focusWindow').css('width', '50vw')
-				$('#main').css({
-					'width' : '50vw',
-					'marginLeft' : '50vw',
-					'marginRight' : '0',
-					})
-			}
+        shoppingMarkers[i].setVisible(true)
+    }
+}
 
-			else {
+function hideCenterMarker() {
 
-				$('#main').css({
-					'width' : '95vw',
-					'margin' : 'auto',
-					
-				})
-			}
-	}
+    for (var i in centerMarkers) {
 
+        centerMarkers[i].setVisible(false)
+        centerMarkers[i].setMap(null)
+    }
 
-	
+    centerMarkers = []
+}
 
+function checkFocusWindowVisibility() {
 
+    if (document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() > 1024) {
 
+        $('#focusWindow').css('width', '25vw')
+        $('#main').css({
+            'width': '75vw',
+            'marginLeft': '25vw',
+            'marginRight': '0',
+        })
+    } else if (document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() > 768 && $(window).width() < 1024) {
 
-	
+        $('#focusWindow').css('width', '35vw')
+        $('#main').css({
+            'width': '65vw',
+            'marginLeft': '35vw',
+            'marginRight': '0',
+        })
+    } else if (document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() > 512 && $(window).width() < 768) {
 
+        $('#focusWindow').css('width', '40vw')
+        $('#main').css({
+            'width': '60vw',
+            'marginLeft': '40vw',
+            'marginRight': '0',
+        })
+    } else if (document.getElementById('focusWindow').style.visibility === 'visible' && $(window).width() < 512) {
 
+        $('#focusWindow').css('width', '50vw')
+        $('#main').css({
+            'width': '50vw',
+            'marginLeft': '50vw',
+            'marginRight': '0',
+        })
+    } else {
 
+        $('#main').css({
+            'width': '95vw',
+            'margin': 'auto',
+
+        })
+    }
+}
