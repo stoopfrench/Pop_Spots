@@ -184,12 +184,14 @@ app.get('/shopping', function(req, res){
 
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-===-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+var httpsKey = secrets.httpsKey
+var httpsCert = secrets.httpsCert
 
 try {
     var httpsConfig = {
         
-        key: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/pop-spots.co/fullchain.pem'),
+        key: fs.readFileSync(httpsKey),
+        cert: fs.readFileSync(httpsCert),
     }
 
     var httpsServer = HTTPS.createServer(httpsConfig, app)
