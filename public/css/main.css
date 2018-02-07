@@ -5,68 +5,68 @@
 body {
 
     background-color: #2A2A2A;
-	font-family: 'Oswald', sans-serif;
+    font-family: 'Oswald', sans-serif;
 }
 
 button {
 
-	cursor: pointer;
-	outline-color: black;
+    cursor: pointer;
+    outline-color: black;
 }
 
 input {
 
-	outline-color: black;
-	background-color: white;
+    outline-color: black;
+    background-color: white;
 }
 
 ol {
 
-	margin: 0;
-	padding-left: 1rem;
+    margin: 0;
+    padding-left: 1rem;
 }
 
 hr {
 
-	background: white;
+    background: white;
 }
 
 #main {
 
-	display: block;
-	width: 95vw;
-	height: 100%;
+    display: block;
+    width: 95vw;
+    height: 100%;
 }
 
 #resultsList {
 
-	list-style: decimal;
-	padding-bottom: .5rem;
+    list-style: decimal;
+    padding-bottom: .5rem;
 }
 
 #resultsList h6 {
 
-	margin: 0;
-	text-decoration: underline;
+    margin: 0;
+    text-decoration: underline;
 }
 
 #resultsList h5 {
 
-	margin: 0;
+    margin: 0;
 }
 
 #resultsList li {
 
-	margin-left: .5rem;
-	cursor: pointer;
-	font-size: 12px;
+    margin-left: .5rem;
+    cursor: pointer;
+    font-size: 12px;
 }
 
 #map {
 
     height: 100vh;
     /*border: 2px solid black;*/
-	position: relative;
+    position: relative;
 }
 
 #inputDiv {
@@ -76,60 +76,60 @@ hr {
 
 #locationTextField {
 
-	padding-left: .25rem;
-	font-size: 1.5rem;
-	border: 1px solid black;
-	width: 70%;
-	height: 52px;
-	margin-bottom: 1rem;
-	margin-top: .5rem;
+    padding-left: .25rem;
+    font-size: 1.5rem;
+    border: 1px solid black;
+    width: 70%;
+    height: 52px;
+    margin-bottom: 1rem;
+    margin-top: .5rem;
 }
 
-@media (min-width: 992px){
+@media (min-width: 992px) {
 
-.modal-lg {
-	   
-	    max-width: 65vw;
-	}
+    .modal-lg {
+
+        max-width: 65vw;
+    }
 }
 
 div.modal-content {
 
-	border: 2px solid grey;
+    border: 2px solid grey;
 }
 
 .modal-title {
 
-	font-family: 'Biryani', sans-serif;
+    font-family: 'Biryani', sans-serif;
 }
 
 .modal-lg {
 
-	margin: auto;
-	margin-top: 5vh;
+    margin: auto;
+    margin-top: 5vh;
 }
 
 #modalCloseButton {
 
-	display: inline-block;
-	text-align: right;
-	margin-right: 1rem;
-	font-size: 40px;
-	color: white;
+    display: inline-block;
+    text-align: right;
+    margin-right: 1rem;
+    font-size: 40px;
+    color: white;
 }
 
 .modal-header {
 
-	font-variant: small-caps;
-	border: 0;
-	color: #DDDDDD;
+    font-variant: small-caps;
+    border: 0;
+    color: #DDDDDD;
 }
 
 .modal-header h1 {
 
-	font-size: 60px;
-	text-shadow: 2px 2px 1px black;
-	font-weight: 900;
+    font-size: 60px;
+    text-shadow: 2px 2px 1px black;
+    font-weight: 900;
 }
 
 .modal-content {
@@ -143,452 +143,451 @@ div.modal-content {
 
 .modal-body {
 
-	background-color: #DDDDDD;
-	border-top: 2px solid black;
+    background-color: #DDDDDD;
+    border-top: 2px solid black;
 }
 
 .modal-body p {
-	
-	margin-top: 1rem;
-	margin-bottom: 2rem;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
+
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 .modal-header {
 
-    margin: auto;    
+    margin: auto;
 }
 
 .modal-footer {
 
-	/*height: 69px;*/
-	border: 0;
-	background-color: white;
+    /*height: 69px;*/
+    border: 0;
+    background-color: white;
 }
 
 .pac-container {
     z-index: 1051 !important;
 }
 
-.modal-backdrop  {
-	
-	background-color: #1E1E1E;
+.modal-backdrop {
+
+    background-color: #1E1E1E;
     opacity: 0.95 !important;
 }
 
 #searchLocationButton {
 
-	background-color: #4C8EE2;
-	width: 20%;
-	height: 52px;
-	margin-bottom: 12px;
-	margin-left: 1rem;
+    background-color: #4C8EE2;
+    width: 20%;
+    height: 52px;
+    margin-bottom: 12px;
+    margin-left: 1rem;
 }
 
 #viewMapButton {
 
-	background-color: #4C8EE2;
-	width: 20%;
-	height: 52px;
-	margin-bottom: 12px;
-	margin-left: 1rem;
+    background-color: #4C8EE2;
+    width: 20%;
+    height: 52px;
+    margin-bottom: 12px;
+    margin-left: 1rem;
 }
 
 #viewMapButton:hover {
 
-	box-shadow: 0px 0px 1px 1px white;
-	filter: contrast(175%);
+    box-shadow: 0px 0px 1px 1px white;
+    filter: contrast(175%);
 }
 
 #mapControl {
 
-   font-family: Arial, sans-serif;
-   margin-left: 10px;
-   transition: all .1s ease-in;
-   width: 144px;
+    font-family: Arial, sans-serif;
+    margin-left: 10px;
+    transition: all .1s ease-in;
+    width: 144px;
 }
 
 #mapControl button {
 
-	background-color: white;
-	color: black;
-	outline-style: none;
-	font-variant: small-caps;
-	font-size: .75rem;
-	padding-top: 0;
-	padding-bottom: 0;
+    background-color: white;
+    color: black;
+    outline-style: none;
+    font-variant: small-caps;
+    font-size: .75rem;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 #hideButton {
 
-	min-width: 51px;
-	border: 1px solid black;
+    min-width: 51px;
+    border: 1px solid black;
     box-shadow: 0px 0px 1px 1px grey;
 }
 
 #legend {
-   
-   font-family: Arial, sans-serif;
-   background: #fff;
-   padding: 10px;
-   margin: 10px;
-   margin-top: 0;
-   border: 1px solid black;
-   transition: all .1s ease-in;
-   font-variant: small-caps;
-   background-color: white;
-   box-shadow: 0px 0px 1px 1px grey;
-   font-size: 12px;
-   width: 160px;
+
+    font-family: Arial, sans-serif;
+    background: #fff;
+    padding: 10px;
+    margin: 10px;
+    margin-top: 0;
+    border: 1px solid black;
+    transition: all .1s ease-in;
+    font-variant: small-caps;
+    background-color: white;
+    box-shadow: 0px 0px 1px 1px grey;
+    font-size: 12px;
+    width: 160px;
 }
 
 #legend button {
 
-	outline-style: none;
+    outline-style: none;
 }
 
 .form-check {
 
-	margin-bottom: .25rem;
+    margin-bottom: .25rem;
 }
 
 .form-check-input {
 
-	margin-top: 0;
+    margin-top: 0;
 }
 
 #newSearchButton {
 
-	display: block;
-	margin: auto;
-	background-color: #4C8EE2;
-	color: white;
-	padding: .5rem;
-	font-variant: small-caps;
-	border-radius: 5px;
-	border: 1px solid black;
+    display: block;
+    margin: auto;
+    background-color: #4C8EE2;
+    color: white;
+    padding: .5rem;
+    font-variant: small-caps;
+    border-radius: 5px;
+    border: 1px solid black;
 }
 
 #newSearchButton:hover {
 
-	background-color: #54A5FF;
-	box-shadow: 0px 0px 1px 1px black;	
+    background-color: #54A5FF;
+    box-shadow: 0px 0px 1px 1px black;
 }
 
 #loadScreen {
 
-	list-style: none;
-	text-align: left;
-	font-family: 'Inconsolata', monospace;
-	background-color: black;
-	color: green;
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-	height: 8rem;
+    list-style: none;
+    text-align: left;
+    font-family: 'Inconsolata', monospace;
+    background-color: black;
+    color: green;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    height: 8rem;
 }
 
 #resetZoomButton {
 
-	outline: none;
-	font-variant: small-caps;
-	border: 1px solid black;
+    outline: none;
+    font-variant: small-caps;
+    border: 1px solid black;
     box-shadow: 0px 0px 1px 1px grey;
 }
 
 button#showAreaButton.btn.btn-secondary {
 
-	padding: 0;
-	width: 31px;
-	outline: none;	
-	border: 1px solid black;
+    padding: 0;
+    width: 31px;
+    outline: none;
+    border: 1px solid black;
     box-shadow: 0px 0px 1px 1px grey;
     padding: 0;
 }
 
 .divider {
 
-	border-bottom: 1px solid black;
-	margin-bottom: .25rem;
-	margin-top: .25rem;
+    border-bottom: 1px solid black;
+    margin-bottom: .25rem;
+    margin-top: .25rem;
 }
 
 div.gm-style-iw {
 
-	max-width: 500px;
+    max-width: 500px;
 }
 
 .gm-style-iw {
-	
-	font-family: 'Oswald';
-	max-width: 500px !important;
+
+    font-family: 'Oswald';
+    max-width: 500px !important;
     top: 20px !important;
-	left: 0 !important;
-	background-color: transparent;
-	margin: 0;
-	padding: 0 !important;
+    left: 0 !important;
+    background-color: transparent;
+    margin: 0;
+    padding: 0 !important;
 }
 
 div.gmnoprint.gm-style-mtc {
 
-	border: 1px solid black;
+    border: 1px solid black;
     box-shadow: 0px 0px 1px 1px grey;
 }
 
 div.gmnoprint {
 
-	border: 1px solid black;
+    border: 1px solid black;
     box-shadow: 0px 0px 1px 1px grey;
 }
 
 div.gm-tilt {
 
-	border: 1px solid black;
+    border: 1px solid black;
     box-shadow: 0px 0px 1px 1px grey;
 }
 
 .clusterInfoWindowStyle {
 
-	background-image: radial-gradient(circle at center, #FAFCFF, #E0E2E5);
+    background-image: radial-gradient(circle at center, #FAFCFF, #E0E2E5);
 }
 
 .restaurantsClusterInfoWindowTitle {
 
-	display: block;
-	border: 1px solid #6C6C6C;
-	/*border-bottom-right-radius: .25rem;*/
-	background-color: #F9850B;
-	background-image: radial-gradient(circle at center, #FFB630, #F9850B);
-	text-align: center;
+    display: block;
+    border: 1px solid #6C6C6C;
+    /*border-bottom-right-radius: .25rem;*/
+    background-color: #F9850B;
+    background-image: radial-gradient(circle at center, #FFB630, #F9850B);
+    text-align: center;
 }
 
 .restaurantsClusterInfoWindowTitle p {
-	
-	font-size: 1.5rem;
-	padding: 10px;
-	margin: 0;
-	color: #444344;
+
+    font-size: 1.5rem;
+    padding: 10px;
+    margin: 0;
+    color: #444344;
 }
 
 .clusterInfoList {
 
-	margin-left: .75rem;
- 	background-color: white;
-
+    margin-left: .75rem;
+    background-color: white;
 }
 
 .clusterInfoList p {
- 	
- 	margin-left: .5rem;
- 	margin-bottom: .5rem;
- 	padding: .25rem;
- 	font-weight: 500;
- 	margin-top: 0;
- 	margin-bottom: 0;
- 	background-color: white;
+
+    margin-left: .5rem;
+    margin-bottom: .5rem;
+    padding: .25rem;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: white;
 }
 
 .clusterInfoListItem {
 
-	cursor: pointer;
-	background-color: white;
-	margin: 0;
- 	font-size: .85rem;
-	padding-top: .125rem;
-	padding-bottom: .125rem;
-	padding-left: 1rem;
-	padding-right: 1rem;
+    cursor: pointer;
+    background-color: white;
+    margin: 0;
+    font-size: .85rem;
+    padding-top: .125rem;
+    padding-bottom: .125rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .entertainmentClusterInfoWindowTitle {
 
-	display: block;
-	border: 1px solid #6C6C6C;
-	background-color: #5A4BC6;
-	background-image: radial-gradient(circle at center, #7C68FF, #5A4BC6);
-	text-align: center;
+    display: block;
+    border: 1px solid #6C6C6C;
+    background-color: #5A4BC6;
+    background-image: radial-gradient(circle at center, #7C68FF, #5A4BC6);
+    text-align: center;
 }
 
 .entertainmentClusterInfoWindowTitle p {
 
-	font-size: 1.5rem;
-	padding: 10px;
-	margin: 0;
-	color: white;
+    font-size: 1.5rem;
+    padding: 10px;
+    margin: 0;
+    color: white;
 }
 
 .recreationClusterInfoWindowTitle {
 
-	border: 1px solid #6C6C6C;
-	border-bottom-right-radius: .25rem;
-	background-color: #E3090E;
-	background-image: radial-gradient(circle at center, #FF000F, #E3090E);
-	text-align: center;
+    border: 1px solid #6C6C6C;
+    border-bottom-right-radius: .25rem;
+    background-color: #E3090E;
+    background-image: radial-gradient(circle at center, #FF000F, #E3090E);
+    text-align: center;
 }
 
 .recreationClusterInfoWindowTitle p {
 
-	font-size: 1.5rem;
-	padding: 10px;
-	margin: 0;
-	color: white;
+    font-size: 1.5rem;
+    padding: 10px;
+    margin: 0;
+    color: white;
 }
 
 .shoppingClusterInfoWindowTitle {
 
-	border: 1px solid #6C6C6C;
-	border-bottom-right-radius: .25rem;
-	background-color: #107208;
-	background-image: radial-gradient(circle at center, #11BC00, #107208);
-	text-align: center;
+    border: 1px solid #6C6C6C;
+    border-bottom-right-radius: .25rem;
+    background-color: #107208;
+    background-image: radial-gradient(circle at center, #11BC00, #107208);
+    text-align: center;
 }
 
 .shoppingClusterInfoWindowTitle p {
 
-	font-size: 1.5rem;
-	padding: 10px;
-	margin: 0;
-	color: white;
+    font-size: 1.5rem;
+    padding: 10px;
+    margin: 0;
+    color: white;
 }
 
 div.placeInfoWindowStyle {
 
-	box-shadow: 0px 0px 5px 5px grey;
+    box-shadow: 0px 0px 5px 5px grey;
 }
 
 .placeInfoWindowTitleContainer {
 
-	color: white;
+    color: white;
 }
 
 .placeInfoWindowStyle {
 
-	text-align: center;
-	max-width: 500px;
+    text-align: center;
+    max-width: 500px;
     background-color: #2A2A2A;
     background-image: radial-gradient(circle at center, #3F3F3F, #2A2A2A);
     border: 2px solid grey;
     border-radius: .25rem;
-    box-shadow: rgba(72, 181, 233, 0.6) 0px 1px 6px;;
-	color: white;
+    box-shadow: rgba(72, 181, 233, 0.6) 0px 1px 6px;
+    ;
+    color: white;
 }
 
 .placeInfoWindowStyle hr {
 
-	background: grey;
+    background: grey;
 }
 
 .placeInfoWindowStyle img {
-	
 
-	border: 2px solid black;
-	border-radius: .25rem;
-	margin: .25rem;
-	margin-top: 0;
+
+    border: 2px solid black;
+    border-radius: .25rem;
+    margin: .25rem;
+    margin-top: 0;
 }
 
 .placeInfoWindowTitle {
 
-	padding: .75rem;
+    padding: .75rem;
 }
 
 #placeInfoWindowRightContainer {
 
-	float: right;	
+    float: right;
 }
 
 #placeInfoWindowRightContainer img {
 
-	margin-right: 1rem;
+    margin-right: 1rem;
 }
 
 #placeAddress {
 
-	display: inline-block;
-	border-radius: .25rem;
-	padding: .25rem;
-	max-width: 200px;
-	min-height: 200px;
-	margin-left: .75rem;
-	text-align: center;
-	font-size: 16px;
+    display: inline-block;
+    border-radius: .25rem;
+    padding: .25rem;
+    max-width: 200px;
+    min-height: 200px;
+    margin-left: .75rem;
+    text-align: center;
+    font-size: 16px;
 }
 
 #placeAddress #currentStateImg {
 
-	border: 0;
+    border: 0;
 }
 
 img#currentStateImg {
 
-	display: block;
-	margin: auto;
+    display: block;
+    margin: auto;
 }
 
-#placeParkingInfoList{
+#placeParkingInfoList {
 
-	list-style: none;
-	font-size: 16px;
-	padding: 0;
+    list-style: none;
+    font-size: 16px;
+    padding: 0;
 }
 
 #placeParkingInfoList li {
 
-	margin: 0;
+    margin: 0;
 }
 
 #placeParkingButton {
 
-	margin-top: .75rem;
-	padding-top: .5rem;
-	color: white;
-	
+    margin-top: .75rem;
+    padding-top: .5rem;
+    color: white;
 }
 
 #placeParkingButton button {
 
-	margin-bottom: 1rem;
-	border: 1px solid grey;
-	background-color: #E6E6E6;
-	height: 40px;
-	font-weight: 500;
-	font-size: 1rem;
-	border-radius: .25rem;
-	outline-style: none;
+    margin-bottom: 1rem;
+    border: 1px solid grey;
+    background-color: #E6E6E6;
+    height: 40px;
+    font-weight: 500;
+    font-size: 1rem;
+    border-radius: .25rem;
+    outline-style: none;
 }
 
 #placeParkingButton button:hover {
 
-	color: red;
+    color: red;
 }
 
 #placeParkingButton button:active {
 
-	background-color: #CECECE;
-	box-shadow: 0px 0px 10px black;
+    background-color: #CECECE;
+    box-shadow: 0px 0px 10px black;
 }
 
 .parkingInfoWindowList {
 
-	list-style: none;
-	padding: 0;
-	margin: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 1rem;
 }
 
 .sidenav {
     height: 100%;
-    width: 25vw; 
-    position: fixed; 
-    z-index: 1; 
+    width: 25vw;
+    position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
     background-color: #2A2A2A;
     background-image: radial-gradient(circle at center, #3F3F3F, #2A2A2A);
-    overflow-x: hidden; 
+    overflow-x: hidden;
     color: white;
     text-align: center;
     font-size: 16px;
-    padding: 1rem; 
+    padding: 1rem;
     padding-top: 30px;
     word-wrap: wrap;
     /*border-right: 2px solid #C2C4CA;*/
@@ -597,9 +596,9 @@ img#currentStateImg {
 
 .sidenav img {
 
-	margin: .5rem;
-	border: 2px solid white;
-	border-radius: .25rem;
+    margin: .5rem;
+    border: 2px solid white;
+    border-radius: .25rem;
 }
 
 .sidenav .closebtn {
@@ -613,101 +612,101 @@ img#currentStateImg {
 }
 
 .sidenav .closebtn:hover {
-    
+
     transform: scale(1.25);
 }
 
 div#showOnMapButton {
 
-	margin-top: 0;
+    margin-top: 0;
 }
 
 #showOnMapButton img {
 
-	cursor: pointer;
-	filter: contrast(150%);
-	border: 1px solid white;
-	width: 80%;
-	height: 10%;
+    cursor: pointer;
+    filter: contrast(150%);
+    border: 1px solid white;
+    width: 80%;
+    height: 10%;
 }
 
 #showOnMapButton img:hover {
 
-	box-shadow: 0px 0px 3px 3px white;
-	filter: contrast(175%);
+    box-shadow: 0px 0px 3px 3px white;
+    filter: contrast(175%);
 }
 
 #showOnMapButton img:active {
 
-	filter: grayscale(80%);
+    filter: grayscale(80%);
 }
 
 #focusWindowFacebook img {
 
-	margin-top: .75rem;
-	margin-bottom: 0;
+    margin-top: .75rem;
+    margin-bottom: 0;
 }
 
 #focusWindowFacebook img:hover {
-	
 
-	transform: scale(1.25);
+
+    transform: scale(1.25);
 }
 
 #focusWindowWebsite img {
 
-	margin-top: .75rem;
-	margin-bottom: 0;
+    margin-top: .75rem;
+    margin-bottom: 0;
 }
 
 #focusWindowWebsite img:hover {
-	
-	transform: scale(1.25);
+
+    transform: scale(1.25);
 }
 
 #focusWindowHoursTitle {
 
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #focusWindowDescription {
 
-	max-height: 11vh;
-	overflow: auto;
-	font-size: .9rem;
+    max-height: 11vh;
+    overflow: auto;
+    font-size: .9rem;
 }
 
 #focusWindowDescriptionTitle {
 
-	cursor: pointer;
-	text-decoration: underline;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 #showMarkerButton {
 
-	margin-top: .5rem;
+    margin-top: .5rem;
 }
 
 #focusWindowPhone {
-	
-	margin: 0;
-	font-size: 1.25rem;
+
+    margin: 0;
+    font-size: 1.25rem;
 }
 
 #focusWindowHours {
 
-	font-size: .75rem;
-	margin-top: 1rem;
+    font-size: .75rem;
+    margin-top: 1rem;
 }
 
 #focusWindowHours h6 {
-	
-	text-decoration: underline;
-	margin-bottom: .25rem;	
+
+    text-decoration: underline;
+    margin-bottom: .25rem;
 }
 
 #focusWindowHoursList {
 
-	list-style: none; 
-	padding: 0;
+    list-style: none;
+    padding: 0;
 }
